@@ -1,0 +1,15 @@
+{
+    
+    "manifest_version": 3,
+    "name": "Storimp: Store while browsing",
+    "version": "1.0",
+  
+    
+    "action": {
+        "default_popup":"index.html",
+        "default_icon":"icon.png"
+    },
+    "permissions":[
+        "tabs"
+    ]
+}
