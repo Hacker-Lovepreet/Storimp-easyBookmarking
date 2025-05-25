@@ -30,6 +30,7 @@ const autoCaptureToggleEl = document.getElementById("auto-capture-toggle");
 // Global State (Loaded from chrome.storage.local in init)
 // =================================================================================
 let quill; // Quill editor instance
+console.log('Global quill variable declared.'); // Early log for variable declaration
 
 /**
  * @type {Array<Object>} myData - Array of note objects.
@@ -87,26 +88,24 @@ function createNoteListItemHTML(noteItem, originalIndex, currentSelectedFolder) 
     if (noteItem.isLink) {
         displayContentPreviewHTML = `<strong>${title}</strong><br><a href="${fullContentHTML}" target="_blank">${fullContentHTML}</a>`;
     } else {
+        console.log('Generating list preview for note content (HTML):', fullContentHTML);
         // For rich text, create a temporary div to get text content for preview
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = fullContentHTML;
-        const textContent = tempDiv.textContent || tempDiv.innerText || "";
+        const textPreview = tempDiv.textContent || tempDiv.innerText || "";
+        console.log('Generated text preview:', textPreview);
 
-        if (textContent.length > MAX_NOTE_CONTENT_PREVIEW_LENGTH) {
+
+        if (textPreview.length > MAX_NOTE_CONTENT_PREVIEW_LENGTH) {
             // Show truncated text preview, but the full content is HTML
-            displayContentPreviewHTML = `<strong>${title}</strong><br>${textContent.substring(0, MAX_NOTE_CONTENT_PREVIEW_LENGTH)}...`;
+            displayContentPreviewHTML = `<strong>${title}</strong><br>${textPreview.substring(0, MAX_NOTE_CONTENT_PREVIEW_LENGTH)}...`;
             expandButtonHTML = `<button class="expand-note-btn" data-note-original-index="${originalIndex}">Expand</button>`;
         } else {
-            // If short enough, display the original HTML (or just text content if preferred for consistency)
-            // For this example, let's display the original HTML if it's short and doesn't need truncation.
-            // However, displaying full HTML in the list might break layout if it's complex.
-            // A safer bet is to always show a text preview.
-            // Let's stick to text preview for simplicity in list.
-            displayContentPreviewHTML = `<strong>${title}</strong><br>${textContent}`;
-             if (textContent.length > MAX_NOTE_CONTENT_PREVIEW_LENGTH || fullContentHTML.includes('<') || fullContentHTML.includes('>')) { // Heuristic to check if there's actual HTML
+            displayContentPreviewHTML = `<strong>${title}</strong><br>${textPreview}`;
+             // Ensure expand button appears if original content had formatting, even if text preview is short
+             if (fullContentHTML.includes('<') && !fullContentHTML.startsWith('<a href') && fullContentHTML !== textPreview ) { 
                  expandButtonHTML = `<button class="expand-note-btn" data-note-original-index="${originalIndex}">Expand</button>`;
              }
-
         }
     }
 
@@ -202,9 +201,11 @@ async function handleCreateFolder() {
  * Handles saving a new note.
  */
 async function handleSaveNote() {
+    console.log('Attempting to save note. Quill instance:', quill);
     const title = noteTitleEl.value.trim();
-    const contentHTML = quill.root.innerHTML; // Get HTML content from Quill
-    const textContent = quill.getText().trim(); // For checking if editor is empty
+    const contentHTML = quill.root.innerHTML; 
+    console.log('Quill HTML content captured:', contentHTML);
+    const textContent = quill.getText().trim(); 
 
     let selectedFolderForSave = folderSelectEl.value;
 
@@ -212,13 +213,17 @@ async function handleSaveNote() {
         selectedFolderForSave = DEFAULT_FOLDER;
     }
 
-    // Check if either title or actual text content (not just empty HTML like <p><br></p>) exists
     if (title || textContent.length > 0) { 
-        myData.push({ title: title, content: contentHTML, folder: selectedFolderForSave, isLink: false });
+        const newNote = { title: title, content: contentHTML, folder: selectedFolderForSave, isLink: false };
+        console.log('New note object to be saved:', newNote);
+        myData.push(newNote);
         await saveDataToStorage();
         renderNotes();
         noteTitleEl.value = "";
-        quill.setText(''); // Clear Quill editor
+        quill.setText(''); 
+        console.log('Quill editor cleared.');
+    } else {
+        console.log('Save note aborted: title and content are empty.');
     }
 }
 
@@ -329,17 +334,17 @@ function openNoteModal(originalIndex) {
         console.error("Invalid note index for modal:", originalIndex);
         return;
     }
-    const note = myData[noteIndex]; // Direct access using the original index
+    const note = myData[noteIndex]; 
 
     if (note) {
+        console.log('Opening modal for note. Title:', note.title, 'HTML Content:', note.content);
         modalNoteTitleEl.textContent = note.title || "Note";
         if (note.isLink) {
-            // For links, generate a clickable link in the modal
             modalNoteContentEl.innerHTML = `<a href="${note.content}" target="_blank">${note.content}</a>`;
         } else {
-            // For rich text notes, render the HTML content
             modalNoteContentEl.innerHTML = note.content || ""; 
         }
+        console.log('Modal content set with innerHTML.');
         noteModalEl.style.display = "block";
     } else {
         console.error("Note not found for modal display, index:", noteIndex);
@@ -348,7 +353,8 @@ function openNoteModal(originalIndex) {
 
 function closeNoteModal() {
     noteModalEl.style.display = "none";
-    modalNoteContentEl.innerHTML = ""; // Clear content to prevent issues
+    modalNoteContentEl.innerHTML = ""; 
+    console.log('Modal closed and content cleared.');
 }
 
 // =================================================================================
@@ -359,11 +365,13 @@ function closeNoteModal() {
  * @param {string} theme - The theme to apply ('light' or 'dark').
  */
 function applyTheme(theme) {
+  console.log('Applying theme:', theme);
   if (theme === 'dark') {
     document.body.classList.add('dark-mode');
   } else {
     document.body.classList.remove('dark-mode');
   }
+  console.log('document.body classList after applyTheme:', document.body.classList.toString());
 }
 
 /**
@@ -372,12 +380,10 @@ function applyTheme(theme) {
  */
 async function loadAndApplyTheme() {
   const settings = await chrome.storage.local.get(["theme"]);
-  if (settings.theme) {
-    applyTheme(settings.theme);
-  } else {
-    // Default to light theme if no setting is found
-    applyTheme('light');
-  }
+  console.log('Loading theme from storage. Stored settings:', settings);
+  const themeToApply = settings.theme || 'light'; // Default to light if undefined
+  console.log('Theme to apply on load:', themeToApply);
+  applyTheme(themeToApply);
 }
 
 
@@ -430,9 +436,16 @@ function attachEventListeners() {
     // Theme toggle button listener
     if (themeToggleBtnEl) {
         themeToggleBtnEl.addEventListener("click", async () => {
+            console.log('Theme toggle clicked.');
             document.body.classList.toggle('dark-mode');
             const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            console.log('New theme to save:', currentTheme);
             await chrome.storage.local.set({ theme: currentTheme });
+            console.log('Theme saved to storage.');
+            // Note: applyTheme is implicitly handled by the classList.toggle and CSS rules.
+            // If we needed to do more JS-based theme adjustments, we might call applyTheme(currentTheme) here.
+            // For now, also log the body classList to confirm the toggle worked as expected by the click handler.
+            console.log('document.body classList after toggle:', document.body.classList.toString());
         });
     }
 }
@@ -462,12 +475,13 @@ async function init() {
                 [{ 'header': [1, 2, false] }],
                 ['bold', 'italic', 'underline'],
                 [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['clean'] // remove formatting button
+                ['clean'] 
               ]
             },
             placeholder: 'Take a note...',
             theme: 'snow'
         });
+        console.log('Quill initialized:', quill ? 'Success' : 'Failed');
     } else {
         console.error("Quill editor placeholder #note-editor not found.");
     }

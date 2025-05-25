@@ -29,6 +29,8 @@
   --hr-color: #c0c0ff;
   --scrollbar-thumb-color: #c1c1c1;
   --scrollbar-track-color: #f1f1f1;
+  --scrollbar-thumb-hover-color: #a0a0a0;
+
 
   /* Quill Specific - Light Theme */
   --quill-toolbar-bg: #f9f9f9;
@@ -72,14 +74,15 @@ body.dark-mode {
   --hr-color: #555555;
   --scrollbar-thumb-color: #555;
   --scrollbar-track-color: #333;
+  --scrollbar-thumb-hover-color: #6a6a6a;
 
   /* Quill Specific - Dark Theme */
   --quill-toolbar-bg: #383c42;
-  --quill-editor-bg: var(--input-bg-color);
-  --quill-text-color: var(--text-color);
-  --quill-border-color: var(--border-color);
-  --quill-toolbar-button-stroke: var(--text-color);
-  --quill-toolbar-button-fill: var(--text-color);
+  --quill-editor-bg: var(--input-bg-color); /* This is #383c42 */
+  --quill-text-color: var(--text-color); /* This is #e0e0e0 */
+  --quill-border-color: var(--border-color); /* This is #555555 */
+  --quill-toolbar-button-stroke: var(--text-color); /* #e0e0e0 */
+  --quill-toolbar-button-fill: var(--text-color); /* #e0e0e0 */
   --quill-toolbar-button-hover-bg: #4f4f70;
   --quill-toolbar-button-active-bg: #5a5a80;
 }
@@ -208,6 +211,21 @@ input[type="text"] { /* Note: textarea is removed */
     color: var(--quill-text-color);
     background-color: var(--quill-editor-bg);
 }
+body.dark-mode .ql-editor {
+    background-color: var(--quill-editor-bg) !important;
+    color: var(--quill-text-color) !important;
+}
+
+/* Quill placeholder text color */
+.ql-editor.ql-blank::before{
+    color: var(--quill-text-color);
+    opacity: 0.6;
+}
+body.dark-mode .ql-editor.ql-blank::before{
+    color: rgba(224, 224, 224, 0.7) !important; /* Using --text-color for dark mode with opacity */
+    /* opacity: 0.7 !important; /* Ensure opacity is also forced if needed, but color usually includes it */
+}
+
 
 .ql-toolbar.ql-snow { 
     border-top-left-radius: 4px;
@@ -215,39 +233,51 @@ input[type="text"] { /* Note: textarea is removed */
     border-bottom: 1px solid var(--quill-border-color);
     background-color: var(--quill-toolbar-bg);
 }
-/* Quill SVG Icons theming */
-body.dark-mode .ql-snow .ql-stroke { stroke: var(--quill-toolbar-button-stroke); }
-body.dark-mode .ql-snow .ql-fill { fill: var(--quill-toolbar-button-fill); }
-body.dark-mode .ql-snow .ql-picker-label { color: var(--quill-toolbar-button-stroke); }
-body.dark-mode .ql-snow .ql-picker-options { background-color: var(--quill-toolbar-bg); border-color: var(--quill-border-color); }
-body.dark-mode .ql-snow .ql-picker-item:hover { background-color: var(--quill-toolbar-button-hover-bg); }
-body.dark-mode .ql-snow .ql-picker-item.ql-selected { background-color: var(--quill-toolbar-button-active-bg); }
-body.dark-mode .ql-snow button:hover, 
-body.dark-mode .ql-snow button:focus, 
-body.dark-mode .ql-snow button.ql-active,
-body.dark-mode .ql-snow .ql-picker-label:hover,
-body.dark-mode .ql-snow .ql-picker-label.ql-active,
-body.dark-mode .ql-snow .ql-picker-item:hover {
-  /* Assuming .ql-stroke is the primary color of icons */
+body.dark-mode .ql-toolbar.ql-snow {
+    background-color: var(--quill-toolbar-bg) !important;
+    border-color: var(--quill-border-color) !important;
 }
+
+/* Quill SVG Icons theming */
+body.dark-mode .ql-snow .ql-stroke { stroke: var(--quill-toolbar-button-stroke) !important; }
+body.dark-mode .ql-snow .ql-fill { fill: var(--quill-toolbar-button-fill) !important; }
+body.dark-mode .ql-snow .ql-picker-label { color: var(--quill-toolbar-button-stroke) !important; }
+body.dark-mode .ql-snow .ql-picker-options { 
+    background-color: var(--quill-toolbar-bg) !important; /* Use toolbar bg for consistency */
+    border-color: var(--quill-border-color) !important; 
+}
+body.dark-mode .ql-snow .ql-picker-item { color: var(--quill-toolbar-button-stroke) !important; } /* Ensure text color for items */
+
+body.dark-mode .ql-snow .ql-picker-item:hover { 
+    background-color: var(--quill-toolbar-button-hover-bg) !important; 
+    color: var(--primary-accent-color) !important; /* Ensure text color changes on hover */
+}
+body.dark-mode .ql-snow .ql-picker-item.ql-selected { 
+    background-color: var(--quill-toolbar-button-active-bg) !important; 
+    color: var(--primary-accent-color) !important; /* Ensure text color for selected */
+}
+
+/* Hover/active states for toolbar buttons */
 body.dark-mode .ql-snow button:hover .ql-stroke,
 body.dark-mode .ql-snow button:focus .ql-stroke,
 body.dark-mode .ql-snow button.ql-active .ql-stroke,
-body.dark-mode .ql-snow .ql-picker-label:hover .ql-stroke,
-body.dark-mode .ql-snow .ql-picker-label.ql-active .ql-stroke,
-body.dark-mode .ql-snow .ql-picker-item:hover .ql-stroke,
-body.dark-mode .ql-snow .ql-picker-item.ql-selected .ql-stroke {
-    stroke: var(--primary-accent-color); /* Or a brighter icon color for dark mode */
+body.dark-mode .ql-snow .ql-picker-label:hover .ql-stroke, /* Picker label stroke on hover */
+body.dark-mode .ql-snow .ql-picker-label.ql-active .ql-stroke { /* Picker label stroke when active */
+    stroke: var(--primary-accent-color) !important; 
 }
 body.dark-mode .ql-snow button:hover .ql-fill,
 body.dark-mode .ql-snow button:focus .ql-fill,
-body.dark-mode .ql-snow button.ql-active .ql-fill,
-body.dark-mode .ql-snow .ql-picker-label:hover .ql-fill,
-body.dark-mode .ql-snow .ql-picker-label.ql-active .ql-fill,
-body.dark-mode .ql-snow .ql-picker-item:hover .ql-fill,
-body.dark-mode .ql-snow .ql-picker-item.ql-selected .ql-fill {
-    fill: var(--primary-accent-color); /* Or a brighter icon color for dark mode */
+body.dark-mode .ql-snow button.ql-active .ql-fill {
+    fill: var(--primary-accent-color) !important; 
 }
+/* Ensure picker label text color changes on hover/active if it's separate from stroke/fill */
+body.dark-mode .ql-snow .ql-picker-label:hover {
+    color: var(--primary-accent-color) !important;
+}
+body.dark-mode .ql-snow .ql-picker-label.ql-active {
+    color: var(--primary-accent-color) !important;
+}
+
 
 #store{
     color: var(--note-list-text-color);
@@ -464,8 +494,8 @@ body.dark-mode .note-text-content a {
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #a0a0a0; /* Slightly darker on hover */
+  background: var(--scrollbar-thumb-hover-color); 
 }
 body.dark-mode ::-webkit-scrollbar-thumb:hover {
-    background: #6a6a6a; 
+    background: var(--scrollbar-thumb-hover-color); 
 }
