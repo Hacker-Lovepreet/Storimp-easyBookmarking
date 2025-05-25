@@ -1,5 +1,7 @@
 // background.js
 
+let extensionWindowId = null; // To store the ID of the panel window
+
 const CHECK_INTERVAL = 2000; // Check every 2 seconds
 const OFFSCREEN_DOCUMENT_PATH = 'offscreen.html';
 
@@ -113,3 +115,52 @@ chrome.runtime.onMessage.addListener(async (message) => {
 // The onInstalled listener handles the very first installation.
 setInterval(checkClipboard, CHECK_INTERVAL);
 console.log("Background script loaded and clipboard check interval started.");
+
+
+chrome.action.onClicked.addListener(async (tab) => {
+  const targetUrl = chrome.runtime.getURL('index.html');
+
+  if (extensionWindowId !== null) {
+    try {
+      // Check if the window still exists
+      const existingWindow = await chrome.windows.get(extensionWindowId);
+      if (existingWindow) {
+        // Window exists, focus it
+        await chrome.windows.update(extensionWindowId, { focused: true });
+        return;
+      } else {
+        // Window ID is stored but window doesn't exist (e.g., closed by user)
+        extensionWindowId = null;
+      }
+    } catch (e) {
+      // Error means window doesn't exist
+      console.log(`Error getting window ${extensionWindowId}: ${e}. Setting ID to null.`);
+      extensionWindowId = null;
+    }
+  }
+
+  // If window doesn't exist or ID was invalid, create it
+  if (extensionWindowId === null) {
+    try {
+      const newWindow = await chrome.windows.create({
+        url: targetUrl,
+        type: 'popup', // Creates a panel-like window without address bar etc.
+        width: 420,
+        height: 700 // Increased height
+      });
+      extensionWindowId = newWindow.id;
+
+      // Optional: Listen for window removal to clear the ID
+      chrome.windows.onRemoved.addListener(function onRemovedListener(removedWindowId) {
+        if (removedWindowId === extensionWindowId) {
+          console.log(`Window ${extensionWindowId} removed. Clearing ID.`);
+          extensionWindowId = null;
+          chrome.windows.onRemoved.removeListener(onRemovedListener); // Clean up listener
+        }
+      });
+
+    } catch (e) {
+      console.error("Error creating window:", e);
+    }
+  }
+});

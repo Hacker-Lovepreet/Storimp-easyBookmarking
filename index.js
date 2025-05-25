@@ -9,6 +9,7 @@ const clrEl = document.getElementById("clr"); // "Clear All Data" button
 const saveTabBtnEl = document.getElementById("save-tab"); // Save Tab button
 const deleteAllNotesBtnEl = document.getElementById("delete-all-notes-btn"); // "Delete All Notes" button
 const deleteSelectedNotesBtnEl = document.getElementById("delete-selected-notes-btn"); // "Delete Selected Notes" button
+const settingsBtnEl = document.getElementById("settings-btn"); // Settings button in menu bar
 
 // Modal Elements
 const noteModalEl = document.getElementById("note-modal");
@@ -353,12 +354,25 @@ function attachEventListeners() {
     autoCaptureToggleEl.addEventListener("change", handleAutoCaptureToggleChange);
 
     // Modal listeners
-    modalCloseBtnEl.addEventListener("click", closeNoteModal);
-    window.addEventListener("click", (event) => {
-        if (event.target === noteModalEl) { // Clicked on the modal backdrop
-            closeNoteModal();
+    if (modalCloseBtnEl) { // Ensure modal elements exist before adding listeners
+        modalCloseBtnEl.addEventListener("click", closeNoteModal);
+        window.addEventListener("click", (event) => {
+            if (event.target === noteModalEl) { // Clicked on the modal backdrop
+                closeNoteModal();
+            }
+        });
+    }
+
+    // Settings button listener
+    if (settingsBtnEl) {
+      settingsBtnEl.addEventListener("click", () => {
+        if (chrome.runtime.openOptionsPage) {
+          chrome.runtime.openOptionsPage();
+        } else {
+          window.open(chrome.runtime.getURL('settings.html'));
         }
-    });
+      });
+    }
 }
 
 // =================================================================================

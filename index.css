@@ -1,11 +1,44 @@
 body{
     margin: 0px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 15px;
+    /* padding: 15px; */ /* Padding will be on the main content container now */
     min-width: 400px;
     background: linear-gradient(to bottom right, #d9d9ff, #b3b3ff);
     color: #333;
 }
+
+/* Styles for the new Menu Bar */
+#menu-bar {
+  background-color: #4a4a70; /* Darker, slightly desaturated blue, similar to button hover */
+  padding: 8px 10px;
+  border-bottom: 1px solid #303050; /* Darker border */
+  margin-bottom: 15px; 
+  display: flex; 
+  align-items: center;
+}
+
+.menu-button { 
+  background-color: #6a6aff; /* Match existing button color */
+  border: 1px solid #5050cc; /* Match existing button hover for border */
+  color: white; /* Text color from existing buttons */
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px; 
+  transition: background-color 0.3s ease; /* Smooth transition from existing buttons */
+}
+
+.menu-button:hover {
+  background-color: #5050cc; /* Match existing button hover color */
+}
+
+/* Adjust padding for the main content area, which is now the second direct div child of body */
+/* The first child is #menu-bar */
+body > div:nth-of-type(2) { /* Selects the main content div */
+    padding: 15px;
+}
+
 
 button{
     margin: 8px 2px; /* Adjusted margin for better spacing */
