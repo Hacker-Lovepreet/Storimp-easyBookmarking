@@ -5,8 +5,16 @@ const saveNoteBtnEl = document.getElementById("save-note-btn");
 const noteTitleEl = document.getElementById("note-title");
 const noteContentEl = document.getElementById("note-content");
 const storeEl = document.getElementById("store"); // UL element for displaying notes
-const clrEl = document.getElementById("clr"); // Clear All button
+const clrEl = document.getElementById("clr"); // "Clear All Data" button
 const saveTabBtnEl = document.getElementById("save-tab"); // Save Tab button
+const deleteAllNotesBtnEl = document.getElementById("delete-all-notes-btn"); // "Delete All Notes" button
+const deleteSelectedNotesBtnEl = document.getElementById("delete-selected-notes-btn"); // "Delete Selected Notes" button
+
+// Modal Elements
+const noteModalEl = document.getElementById("note-modal");
+const modalCloseBtnEl = document.querySelector(".modal-close-btn");
+const modalNoteTitleEl = document.getElementById("modal-note-title");
+const modalNoteContentEl = document.getElementById("modal-note-content");
 
 // Folder Management Elements
 const folderSelectEl = document.getElementById("folder-select");
@@ -33,6 +41,7 @@ let myFolders = [];
 
 const DEFAULT_FOLDER = "uncategorized";
 const ALL_NOTES_FOLDER_VALUE = "all";
+const MAX_NOTE_CONTENT_PREVIEW_LENGTH = 100; // Max characters to show in list view
 
 // =================================================================================
 // DOM Manipulation & Rendering Functions
@@ -67,13 +76,22 @@ function populateFolderSelect() {
  */
 function createNoteListItemHTML(noteItem, originalIndex, currentSelectedFolder) {
     const title = noteItem.title ? noteItem.title : "No Title";
-    let content = noteItem.content ? noteItem.content : "";
-    let listItemContentHTML = "";
+    let content = noteItem.content ? noteItem.content : ""; // Full content
+    let displayContentHTML = "";
+    let expandButtonHTML = "";
 
     if (noteItem.isLink) {
-        listItemContentHTML = `<strong>${title}</strong><br><a href="${content}" target="_blank">${content}</a>`;
+        // For links, usually display the full link, or a shortened version if very long.
+        // For now, keep as is, but truncation could be applied to 'title' or 'content' here too.
+        displayContentHTML = `<strong>${title}</strong><br><a href="${content}" target="_blank">${content}</a>`;
     } else {
-        listItemContentHTML = `<strong>${title}</strong><br>${content.replace(/\n/g, '<br>')}`;
+        const contentForDisplay = content.replace(/\n/g, '<br>'); // Handle newlines for HTML
+        if (content.length > MAX_NOTE_CONTENT_PREVIEW_LENGTH) {
+            displayContentHTML = `<strong>${title}</strong><br>${contentForDisplay.substring(0, MAX_NOTE_CONTENT_PREVIEW_LENGTH)}...`;
+            expandButtonHTML = `<button class="expand-note-btn" data-note-original-index="${originalIndex}">Expand</button>`;
+        } else {
+            displayContentHTML = `<strong>${title}</strong><br>${contentForDisplay}`;
+        }
     }
 
     let folderDisplayHTML = "";
@@ -81,8 +99,11 @@ function createNoteListItemHTML(noteItem, originalIndex, currentSelectedFolder) 
         folderDisplayHTML = `<span class="note-folder-tag">[${noteItem.folder}]</span> `;
     }
 
+    // Note: The expand button is placed after the text content div, adjust CSS if needed or place inside.
+    // For simplicity, placing it within the flow here.
     return `<li>
-                <div class="note-text-content">${folderDisplayHTML}${listItemContentHTML}</div>
+                <input type="checkbox" class="note-checkbox" data-note-original-index="${originalIndex}">
+                <div class="note-text-content">${folderDisplayHTML}${displayContentHTML} ${expandButtonHTML}</div>
                 <button class="delete-btn" data-original-index="${originalIndex}">Delete</button>
             </li>`;
 }
@@ -223,16 +244,28 @@ async function handleDeleteNote(originalIndexToDelete) {
  * Handles clearing all notes and folders from chrome.storage.local and the UI.
  */
 async function handleClearAllData() {
-    if (confirm("Are you sure you want to delete all notes and folders? This action cannot be undone.")) {
-        await chrome.storage.local.remove(["data", "folders"]);
+    if (confirm("Are you sure you want to delete ALL data, including notes AND folders? This action cannot be undone.")) {
+        // Clear notes, folders, and also reset lastCopiedText and auto-capture setting for a full reset.
+        await chrome.storage.local.remove(["data", "folders", "lastCopiedText"]);
+        await chrome.storage.local.set({ isAutoCaptureEnabled: false }); 
+        
         myData = [];
         myFolders = [];
-        // We might also want to reset isAutoCaptureEnabled here, or handle it separately.
-        // For now, let's keep it focused on notes and folders.
-        // await chrome.storage.local.set({ isAutoCaptureEnabled: false });
-        // autoCaptureToggleEl.checked = false;
+        autoCaptureToggleEl.checked = false; // Update UI for auto-capture
 
         populateFolderSelect();
+        renderNotes();
+    }
+}
+
+/**
+ * Handles deleting all notes (but not folders).
+ */
+async function handleDeleteAllNotes() {
+    if (confirm("Are you sure you want to delete all notes? Your folders will remain. This action cannot be undone.")) {
+        myData = [];
+        await saveDataToStorage(); // Saves the empty myData array
+        await chrome.storage.local.set({ lastCopiedText: "" }); // Reset lastCopiedText
         renderNotes();
     }
 }
@@ -245,6 +278,54 @@ async function handleAutoCaptureToggleChange() {
     console.log("Auto-capture setting saved:", autoCaptureToggleEl.checked);
 }
 
+/**
+ * Handles deleting selected notes.
+ */
+async function handleDeleteSelectedNotes() {
+    const checkedCheckboxes = document.querySelectorAll('.note-checkbox:checked');
+    if (checkedCheckboxes.length === 0) {
+        alert("No notes selected for deletion.");
+        return;
+    }
+
+    const indicesToDelete = Array.from(checkedCheckboxes).map(cb => parseInt(cb.dataset.noteOriginalIndex));
+
+    if (confirm(`Are you sure you want to delete ${indicesToDelete.length} selected note(s)? This action cannot be undone.`)) {
+        // Filter out the notes to be deleted.
+        // The 'originalIndex' stored in the checkbox directly corresponds to the index in the myData array.
+        myData = myData.filter((note, index) => !indicesToDelete.includes(index));
+        
+        await saveDataToStorage();
+        renderNotes(); // Re-render the notes list
+    }
+}
+
+
+// =================================================================================
+// Modal Interaction Functions
+// =================================================================================
+function openNoteModal(originalIndex) {
+    const noteIndex = parseInt(originalIndex, 10);
+    if (isNaN(noteIndex) || noteIndex < 0 || noteIndex >= myData.length) {
+        console.error("Invalid note index for modal:", originalIndex);
+        return;
+    }
+    const note = myData[noteIndex]; // Direct access using the original index
+
+    if (note) {
+        modalNoteTitleEl.textContent = note.title || "Note"; // Default title if note.title is empty
+        // For content, use textContent to prevent XSS if content could be HTML.
+        // If content is expected to be plain text with newlines, CSS white-space: pre-wrap handles it.
+        modalNoteContentEl.textContent = note.content || ""; 
+        noteModalEl.style.display = "block";
+    } else {
+        console.error("Note not found for modal display, index:", noteIndex);
+    }
+}
+
+function closeNoteModal() {
+    noteModalEl.style.display = "none";
+}
 
 // =================================================================================
 // Event Handlers & Listener Attachments
@@ -253,7 +334,10 @@ async function handleAutoCaptureToggleChange() {
 function handleStoreElClick(event) {
     if (event.target.classList.contains("delete-btn")) {
         const originalIndexToDelete = parseInt(event.target.dataset.originalIndex, 10);
-        handleDeleteNote(originalIndexToDelete); // handleDeleteNote is now async
+        handleDeleteNote(originalIndexToDelete);
+    } else if (event.target.classList.contains("expand-note-btn")) {
+        const originalIndexToExpand = event.target.dataset.noteOriginalIndex;
+        openNoteModal(originalIndexToExpand);
     }
 }
 
@@ -261,10 +345,20 @@ function attachEventListeners() {
     saveNoteBtnEl.addEventListener("click", handleSaveNote);
     createFolderBtnEl.addEventListener("click", handleCreateFolder);
     saveTabBtnEl.addEventListener("click", handleSaveTab);
+    deleteAllNotesBtnEl.addEventListener("click", handleDeleteAllNotes);
+    deleteSelectedNotesBtnEl.addEventListener("click", handleDeleteSelectedNotes);
     clrEl.addEventListener("click", handleClearAllData);
-    storeEl.addEventListener("click", handleStoreElClick);
+    storeEl.addEventListener("click", handleStoreElClick); // Delegated for delete and expand buttons
     folderSelectEl.addEventListener("change", renderNotes);
     autoCaptureToggleEl.addEventListener("change", handleAutoCaptureToggleChange);
+
+    // Modal listeners
+    modalCloseBtnEl.addEventListener("click", closeNoteModal);
+    window.addEventListener("click", (event) => {
+        if (event.target === noteModalEl) { // Clicked on the modal backdrop
+            closeNoteModal();
+        }
+    });
 }
 
 // =================================================================================
