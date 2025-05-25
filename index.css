@@ -1,42 +1,151 @@
 body{
     margin: 0px;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 15px;
     min-width: 400px;
-    background-color: #ccccff;
+    background: linear-gradient(to bottom right, #d9d9ff, #b3b3ff);
+    color: #333;
 }
 
 button{
-    margin: 5px 0px;
-    background-color: #8080ff;
-    border-radius: 3px;
-    border: 1px solid #8080ff;
-    font-size: 18px;
+    margin: 8px 2px; /* Adjusted margin for better spacing */
+    background-color: #6a6aff; /* Slightly darker blue */
+    border-radius: 5px; /* More rounded corners */
+    border: none; /* Remove border for a flatter look */
+    font-size: 16px; /* Slightly smaller font size */
     font-weight: bold;
-    color:white;
-    padding:10px;
+    color: white;
+    padding: 10px 15px; /* Adjusted padding */
+    cursor: pointer; /* Add cursor pointer */
+    transition: background-color 0.3s ease; /* Smooth transition for hover */
 }
 
+button:hover {
+    background-color: #5050cc; /* Darker shade on hover */
+}
 
-input{
-    
-    width:100%;
-    padding: 10px;
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 12px;
     box-sizing: border-box;
-    border: 1px solid #8080ff;
-    border-radius: 3px;
+    border: 1px solid #b0b0e0; /* Lighter border */
+    border-radius: 5px;
+    margin-bottom: 10px; /* Add some space below inputs */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+}
 
+#note-title {
+    /* Specific styles for note-title if any, defaults are good for now */
 }
+
+#note-content {
+    height: 150px; /* Set a decent default height */
+    resize: vertical; /* Allow vertical resizing */
+}
+
 #store{
-    color:blue;
-    font-size: 16px;
-    font-weight:bolder;
+    color: #404080; /* Darker, less saturated blue for text */
+    font-size: 15px;
+    font-weight: normal; /* Bolder might be too much with a sleek design */
+    padding-left: 5px; /* Add a little padding to the list itself */
 }
+
 ul{
     list-style-type: none;
-    margin:0;
-    padding:0px;
+    margin: 10px 0 0 0; /* Add margin top */
+    padding: 0px;
 }
+
 li{
-    padding:5px 0px;
+    padding: 10px 5px; /* Adjusted padding */
+    border-bottom: 1px solid #e0e0ff; /* Separator for notes */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    word-wrap: break-word; /* Ensure long words in notes break */
+    overflow-wrap: break-word; /* Ensure long words in notes break */
+}
+
+li:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+.note-text-content {
+    flex-grow: 1;
+    margin-right: 10px; /* Space before the delete button */
+    /* Allow line breaks within the content */
+    white-space: pre-wrap; 
+    word-break: break-word;
+}
+
+.delete-btn {
+    background-color: #ff6666; /* Reddish color for delete */
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: auto; /* Pushes button to the far right if flex space allows*/
+    flex-shrink: 0; /* Prevent button from shrinking */
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Folder Management Section */
+#folder-management {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between items */
+    margin-bottom: 15px;
+}
+
+#folder-select {
+    padding: 8px;
+    border: 1px solid #b0b0e0;
+    border-radius: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    flex-grow: 1; /* Allows select to take available space */
+}
+
+#new-folder-name {
+    padding: 8px; /* Match select padding */
+    font-size: 14px; /* Match select font size */
+    width: auto; /* Override default 100% width for this input */
+    flex-grow: 2; /* Takes more space than select but less than a full line input */
+    margin-bottom: 0; /* Remove default margin-bottom for input[type="text"] */
+}
+
+#create-folder-btn {
+    padding: 8px 12px; /* Slightly smaller padding */
+    font-size: 14px; /* Slightly smaller font */
+    margin: 0; /* Reset general button margin */
+    background-color: #5cb85c; /* Green color for create */
+}
+#create-folder-btn:hover {
+    background-color: #4cae4c; /* Darker green on hover */
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #c0c0ff; /* Light separator line */
+    margin-bottom: 15px;
+}
+
+/* Note Folder Tag Styling */
+.note-folder-tag {
+    background-color: #e0e0ff; /* Light purple/blue tag background */
+    color: #505080; /* Darker text for tag */
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-right: 5px;
+    display: inline-block; /* Ensures padding and background apply correctly */
 }

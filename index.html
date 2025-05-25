@@ -7,8 +7,20 @@
 </head>
 <body>
     <div>
-        <input type="text" id="input-data"><br>
-        <button id="save-data">Save Data</button>
+        <div id="settings-section">
+            <label for="auto-capture-toggle">Auto-capture Copied Text:</label>
+            <input type="checkbox" id="auto-capture-toggle">
+        </div>
+        <hr>
+        <div id="folder-management">
+            <select id="folder-select"></select>
+            <input type="text" id="new-folder-name" placeholder="New folder name...">
+            <button id="create-folder-btn">Create Folder</button>
+        </div>
+        <hr> 
+        <input type="text" id="note-title" placeholder="Note Title"><br>
+        <textarea id="note-content" placeholder="Take a note..."></textarea><br>
+        <button id="save-note-btn">Save Note</button>
         <button id="clr">Clear</button>
         <button id="save-tab">Save Url</button><br>
 

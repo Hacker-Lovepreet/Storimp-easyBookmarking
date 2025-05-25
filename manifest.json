@@ -10,6 +10,17 @@
         "default_icon":"icon.png"
     },
     "permissions":[
-        "tabs"
+        "tabs",
+        "clipboardRead",
+        "storage"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
     ]
 }
