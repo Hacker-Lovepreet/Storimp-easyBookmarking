@@ -9,7 +9,8 @@
     "permissions": [
         "tabs",
         "clipboardRead",
-        "storage"
+        "storage",
+        "offscreen"
     ],
     "background": {
         "service_worker": "background.js"
