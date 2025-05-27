@@ -66,6 +66,99 @@ body.dark-mode {
   --scrollbar-thumb-hover-color: #6a6a6a;
 }
 
+/* Top Bar Container for Hamburger Button */
+#top-bar-container {
+    background-color: var(--secondary-accent-color);
+    padding: 8px 15px; /* Adjusted padding */
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--secondary-accent-hover-color);
+    /* position: sticky; /* If we want it to stick at the top */
+    /* top: 0; */
+    /* z-index: 50; */ /* Ensure it's above other content if sticky */
+}
+
+#hamburger-btn {
+    background: none;
+    border: none;
+    color: var(--text-color); /* Use text color for icon */
+    font-size: 24px; /* Larger hamburger icon */
+    padding: 5px; /* Make it easier to click */
+    cursor: pointer;
+    margin: 0; /* Reset default button margin */
+    line-height: 1; /* Ensure icon is centered */
+}
+#hamburger-btn:hover {
+    background-color: rgba(0,0,0,0.05); /* Subtle hover */
+    border-radius: 4px;
+}
+body.dark-mode #hamburger-btn {
+    color: var(--text-color); /* Ensure it uses dark mode text color */
+}
+body.dark-mode #hamburger-btn:hover {
+    background-color: rgba(255,255,255,0.1); /* Subtle hover for dark mode */
+}
+
+
+/* Hamburger Menu Panel */
+#hamburger-menu {
+    display: none; /* Hidden by default */
+    position: fixed; /* Or absolute, depending on desired behavior */
+    left: 0;
+    top: 0; /* Adjust if top-bar has a fixed height, e.g., top: 50px; */
+    width: 280px; /* Width of the menu */
+    height: 100%;
+    background-color: var(--bg-color); /* Use main background color */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    z-index: 100; /* Ensure it's above other content */
+    padding-top: 20px; /* Space for items */
+    border-right: 1px solid var(--border-color);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%); /* Start off-screen */
+}
+#hamburger-menu.open {
+    display: block; /* Or flex/grid if needed for ul styling */
+    transform: translateX(0);
+}
+
+#hamburger-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#hamburger-menu li button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 12px 20px; /* Generous padding for touch */
+    width: 100%;
+    text-align: left;
+    font-size: 15px; /* Consistent font size */
+    font-family: inherit;
+    cursor: pointer;
+    display: block; /* Ensure it takes full width for click */
+    margin: 0; /* Reset default button margin */
+    border-radius: 0; /* No rounding for menu items */
+}
+
+#hamburger-menu li button:hover {
+    background-color: var(--secondary-accent-color); /* Use secondary for hover */
+}
+body.dark-mode #hamburger-menu li button {
+    color: var(--text-color); /* Ensure dark mode text color */
+}
+body.dark-mode #hamburger-menu li button:hover {
+    background-color: var(--secondary-accent-color); /* Ensure dark mode hover */
+}
+
+.menu-divider {
+    height: 1px;
+    background-color: var(--border-color); /* Use border color for divider */
+    border: none;
+    margin: 10px 0; /* Space around divider */
+}
+
 
 body{
     margin: 0;
@@ -78,42 +171,25 @@ body{
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* Styles for the new Menu Bar */
-#menu-bar {
-  background-color: var(--secondary-accent-color);
-  padding: 10px 15px; /* Increased padding */
-  border-bottom: 1px solid var(--secondary-accent-hover-color);
-  margin-bottom: 20px; /* Increased margin */
-  display: flex; 
-  align-items: center;
-}
-
-.menu-button { 
-  background-color: var(--primary-accent-color);
-  border: none; /* Removed border for flatter Apple style */
-  color: var(--button-text-color);
-  padding: 6px 12px; /* Adjusted padding */
-  border-radius: 6px; /* Slightly more rounded */
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500; /* Medium weight */
-  margin-right: 10px; 
-  transition: background-color 0.2s ease;
-}
-
-.menu-button:hover {
-  background-color: var(--primary-accent-hover-color);
-}
+/* Styles for the new Menu Bar - This section can be removed or repurposed if #top-bar-container replaces it entirely */
+/* #menu-bar { ... } */
+/* .menu-button { ... } */
 
 /* Padding for the main content area */
 .main-content-area {
-    padding: 0 20px 20px 20px; /* Consistent horizontal padding, remove top padding if menu-bar provides enough space */
+    padding: 20px; /* Add top padding back if #top-bar-container is not sticky or part of flow */
+    /* If #top-bar-container is sticky, you might need padding-top on main-content-area to avoid overlap */
+    /* e.g., padding-top: 60px; where 60px is height of top-bar */
     background-color: var(--bg-color); 
 }
 
 /* Search Bar Styling */
 #search-container {
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
+    display: block; /* Initially visible, JS will toggle */
+}
+#search-container.hidden { /* Class to hide search bar */
+    display: none;
 }
 
 #search-bar {
@@ -487,3 +563,207 @@ body.dark-mode ::-webkit-scrollbar-thumb {
 body.dark-mode ::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-thumb-hover-color); 
 }
+
+/* =================================================================================
+   Top Bar and Hamburger Menu Styles
+   ================================================================================= */
+
+#top-bar-container {
+    display: flex;
+    justify-content: flex-start; /* Align hamburger to the left */
+    padding: 8px 15px; 
+    background-color: var(--secondary-accent-color); 
+    border-bottom: 1px solid var(--secondary-accent-hover-color);
+    position: sticky; /* Stick to the top */
+    top: 0;
+    z-index: 50; /* Ensure it's above other content but below the menu panel */
+}
+
+#hamburger-btn {
+    background: none;
+    border: none;
+    font-size: 24px; 
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 5px;
+    margin: 0; 
+    line-height: 1; /* For better vertical alignment of the icon */
+}
+#hamburger-btn:hover {
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 4px;
+}
+body.dark-mode #hamburger-btn {
+    color: var(--text-color);
+}
+body.dark-mode #hamburger-btn:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+#hamburger-menu { /* Renamed from #hamburger-menu.menu-panel for simplicity */
+    display: none; 
+    position: fixed; 
+    left: 0;
+    top: 0; 
+    width: 280px; 
+    height: 100%;
+    background-color: var(--bg-color); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000; /* Higher z-index to be on top of everything */
+    padding: 15px 0; /* Top/bottom padding for the panel */
+    border-right: 1px solid var(--border-color);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%); 
+}
+#hamburger-menu.open {
+    display: block; 
+    transform: translateX(0);
+}
+body.dark-mode #hamburger-menu {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Darker shadow for dark mode */
+}
+
+#hamburger-menu ul {
+    list-style: none; 
+    margin: 0; 
+    padding: 0;
+}
+
+#hamburger-menu li button { /* Targets buttons directly within li */
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 12px 20px; /* Consistent padding for menu items */
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px; 
+    font-weight: 500; /* Medium weight, consistent with other buttons */
+    font-family: inherit; /* Ensure it uses the body font */
+    box-sizing: border-box;
+    margin: 0; /* Reset any default button margins */
+    border-radius: 0; /* Menu items typically are not rounded */
+}
+#hamburger-menu li button:hover {
+    background-color: var(--secondary-accent-hover-color); /* Use a subtle hover, like menu bar items */
+}
+body.dark-mode #hamburger-menu li button {
+    color: var(--text-color); /* Ensure correct text color in dark mode */
+}
+body.dark-mode #hamburger-menu li button:hover {
+    background-color: var(--secondary-accent-hover-color); /* Consistent hover in dark mode */
+}
+
+#hamburger-menu hr.menu-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 10px 0; /* Space around the divider */
+}
+
+/* Main content area adjustment for sticky top bar */
+.main-content-area {
+    /* If #top-bar-container height is dynamic, JS might be needed to set this.
+       Assuming a fixed height for #top-bar-container (e.g. ~45-50px based on padding & font) */
+    padding-top: 60px; /* Add padding to prevent overlap with sticky top-bar */
+}
+
+
+/* Utility class for hiding elements like the search bar */
+.hidden {
+    display: none !important;
+}
+
+/* Hamburger Menu Styles */
+
+/* Top Bar Container for Hamburger Button - Already styled as #top-bar-container */
+/* Styles for #hamburger-btn are already in #top-bar-container section, ensure they match requirements */
+/* Example for #hamburger-btn if it needed overrides or was separate:
+#hamburger-btn {
+    background: none;
+    border: none;
+    font-size: 24px; 
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 5px;
+    margin: 0; 
+}
+#hamburger-btn:hover {
+    opacity: 0.7;
+}
+body.dark-mode #hamburger-btn {
+    color: var(--text-color);
+}
+*/
+
+/* Hamburger Menu Panel - Already styled as #hamburger-menu */
+/* Ensure its .open state and other properties match requirements */
+/* Example for #hamburger-menu.menu-panel if it needed overrides:
+#hamburger-menu.menu-panel {
+    display: none; 
+    position: fixed; 
+    left: 0;
+    top: 0; 
+    width: 280px; 
+    height: 100%;
+    background-color: var(--bg-color); 
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    z-index: 100; 
+    padding-top: 20px; 
+    border-right: 1px solid var(--border-color);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%); 
+}
+#hamburger-menu.menu-panel.open {
+    display: block; 
+    transform: translateX(0);
+}
+body.dark-mode #hamburger-menu.menu-panel {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
+}
+*/
+
+/* Styles for Menu Items - ul, li, button inside #hamburger-menu are already styled */
+/* Ensure they match requirements, especially: */
+/*
+#hamburger-menu ul {
+    list-style: none; margin: 0; padding: 0;
+}
+#hamburger-menu li button {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 10px 15px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px; 
+    font-weight: normal; 
+}
+#hamburger-menu li button:hover {
+    background-color: var(--note-item-border-color); 
+}
+body.dark-mode #hamburger-menu li button {
+    color: var(--text-color);
+}
+body.dark-mode #hamburger-menu li button:hover {
+    background-color: var(--border-color); 
+}
+*/
+
+/* Menu Divider - hr.menu-divider is already styled */
+/* Ensure it matches requirements:
+#hamburger-menu hr.menu-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 8px 0;
+}
+*/
+
+/* Hidden Class for Search Bar - .hidden class for #search-container is already styled */
+/* Ensure it matches requirements:
+.hidden {
+    display: none !important;
+}
+*/

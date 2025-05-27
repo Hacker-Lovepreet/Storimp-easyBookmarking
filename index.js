@@ -5,12 +5,19 @@ const saveNoteBtnEl = document.getElementById("save-note-btn");
 const noteTitleEl = document.getElementById("note-title");
 // Note: noteContentEl is removed as Quill replaces the textarea
 const storeEl = document.getElementById("store"); // UL element for displaying notes
-const clrEl = document.getElementById("clr"); // "Clear All Data" button
 const saveTabBtnEl = document.getElementById("save-tab"); // Save Tab button
-const deleteAllNotesBtnEl = document.getElementById("delete-all-notes-btn"); // "Delete All Notes" button
-const deleteSelectedNotesBtnEl = document.getElementById("delete-selected-notes-btn"); // "Delete Selected Notes" button
-const settingsBtnEl = document.getElementById("settings-btn"); // Settings button in menu bar
-const themeToggleBtnEl = document.getElementById("theme-toggle-btn"); // Theme toggle button
+
+// Hamburger Menu Elements (New)
+const hamburgerBtnEl = document.getElementById("hamburger-btn");
+const hamburgerMenuEl = document.getElementById("hamburger-menu");
+const menuSettingsBtnEl = document.getElementById("menu-settings-btn");
+const menuThemeToggleBtnEl = document.getElementById("menu-theme-toggle-btn");
+const menuSearchToggleBtnEl = document.getElementById("menu-search-toggle-btn");
+const menuDeleteSelectedBtnEl = document.getElementById("menu-delete-selected-btn");
+const menuDeleteAllBtnEl = document.getElementById("menu-delete-all-btn");
+const menuClearDataBtnEl = document.getElementById("menu-clear-data-btn");
+const searchContainerEl = document.getElementById("search-container"); // To toggle its visibility
+
 
 // Modal Elements
 const noteModalEl = document.getElementById("note-modal");
@@ -388,6 +395,56 @@ async function loadAndApplyTheme() {
 // Event Handlers & Listener Attachments
 // =================================================================================
 
+// Hamburger Menu Toggle Function
+function toggleHamburgerMenu() {
+    if (hamburgerMenuEl) {
+        hamburgerMenuEl.classList.toggle("open");
+    }
+}
+
+// Function to apply search visibility and update button text
+function applySearchVisibility(isVisible) {
+    if (searchContainerEl && menuSearchToggleBtnEl) {
+        if (isVisible) {
+            searchContainerEl.classList.remove("hidden");
+            menuSearchToggleBtnEl.textContent = "Disable Search Bar";
+            if (searchBarEl) { // Focus only if becoming visible
+                searchBarEl.focus();
+            }
+        } else {
+            searchContainerEl.classList.add("hidden");
+            menuSearchToggleBtnEl.textContent = "Enable Search Bar";
+        }
+    }
+}
+
+// Search Bar Toggle Function (Handler for menu button)
+async function handleToggleSearchBar() {
+    const result = await chrome.storage.local.get(["isSearchVisible"]);
+    let currentVisibility = result.isSearchVisible !== undefined ? result.isSearchVisible : true; // Default to true if not set
+    const newVisibility = !currentVisibility;
+    await chrome.storage.local.set({ isSearchVisible: newVisibility });
+    applySearchVisibility(newVisibility);
+}
+
+// Theme Toggle Function (to be called by menu button)
+async function handleThemeToggle() {
+    document.body.classList.toggle('dark-mode');
+    const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+    await chrome.storage.local.set({ theme: currentTheme });
+    console.log('Theme saved to storage:', currentTheme);
+}
+
+// Settings Function (to be called by menu button)
+function handleOpenSettings() {
+    if (chrome.runtime.openOptionsPage) {
+        chrome.runtime.openOptionsPage();
+    } else {
+        window.open(chrome.runtime.getURL('settings.html'));
+    }
+}
+
+
 function handleStoreElClick(event) {
     if (event.target.classList.contains("delete-btn")) {
         const originalIndexToDelete = parseInt(event.target.dataset.originalIndex, 10);
@@ -402,17 +459,16 @@ function attachEventListeners() {
     if (saveNoteBtnEl) saveNoteBtnEl.addEventListener("click", handleSaveNote);
     if (createFolderBtnEl) createFolderBtnEl.addEventListener("click", handleCreateFolder);
     if (saveTabBtnEl) saveTabBtnEl.addEventListener("click", handleSaveTab);
-    if (deleteAllNotesBtnEl) deleteAllNotesBtnEl.addEventListener("click", handleDeleteAllNotes);
-    if (deleteSelectedNotesBtnEl) deleteSelectedNotesBtnEl.addEventListener("click", handleDeleteSelectedNotes);
-    if (clrEl) clrEl.addEventListener("click", handleClearAllData);
+    // Removed old direct button listeners for delete actions, settings, theme
+
     if (storeEl) storeEl.addEventListener("click", handleStoreElClick); // Delegated for delete and expand buttons
     
     if (folderSelectEl) {
         folderSelectEl.addEventListener("change", () => {
-            if (searchBarEl) { // If search bar exists
-                searchBarEl.value = ""; // Clear search bar
+            if (searchBarEl) { 
+                searchBarEl.value = ""; 
             }
-            renderNotes(); // Render with no search term
+            renderNotes(); 
         });
     }
 
@@ -421,6 +477,51 @@ function attachEventListeners() {
             renderNotes(searchBarEl.value);
         });
     }
+
+    // Hamburger Menu Listeners
+    if (hamburgerBtnEl) {
+        hamburgerBtnEl.addEventListener("click", toggleHamburgerMenu);
+    }
+    // Close menu if clicking outside of it (on the main content area)
+    // This needs to be more robust if main-content-area doesn't cover everything or if there are other clickable bg elements.
+    // For now, a simple click on main-content-area will close it if it's open.
+    const mainContentAreaEl = document.querySelector('.main-content-area');
+    if (mainContentAreaEl && hamburgerMenuEl) {
+        mainContentAreaEl.addEventListener('click', () => {
+            if (hamburgerMenuEl.classList.contains('open')) {
+                toggleHamburgerMenu();
+            }
+        });
+    }
+
+
+    // New Menu Item Listeners
+    if (menuSettingsBtnEl) menuSettingsBtnEl.addEventListener("click", () => {
+        handleOpenSettings();
+        toggleHamburgerMenu(); // Close menu after action
+    });
+    if (menuThemeToggleBtnEl) menuThemeToggleBtnEl.addEventListener("click", () => {
+        handleThemeToggle();
+        // Theme toggle is visual, so menu can stay open or be closed. Let's close it for consistency.
+        toggleHamburgerMenu();
+    });
+    if (menuSearchToggleBtnEl) menuSearchToggleBtnEl.addEventListener("click", () => {
+        handleToggleSearchBar(); // Use the new handler
+        toggleHamburgerMenu(); // Close menu after action
+    });
+    if (menuDeleteSelectedBtnEl) menuDeleteSelectedBtnEl.addEventListener("click", () => {
+        handleDeleteSelectedNotes();
+        toggleHamburgerMenu(); // Close menu after action
+    });
+    if (menuDeleteAllBtnEl) menuDeleteAllBtnEl.addEventListener("click", () => {
+        handleDeleteAllNotes();
+        toggleHamburgerMenu(); // Close menu after action
+    });
+    if (menuClearDataBtnEl) menuClearDataBtnEl.addEventListener("click", () => {
+        handleClearAllData();
+        toggleHamburgerMenu(); // Close menu after action
+    });
+
 
     // Modal listeners
     if (modalCloseBtnEl) { 
@@ -431,33 +532,7 @@ function attachEventListeners() {
             }
         });
     }
-
-    // Settings button listener
-    if (settingsBtnEl) {
-      settingsBtnEl.addEventListener("click", () => {
-        if (chrome.runtime.openOptionsPage) {
-          chrome.runtime.openOptionsPage();
-        } else {
-          window.open(chrome.runtime.getURL('settings.html'));
-        }
-      });
-    }
-
-    // Theme toggle button listener
-    if (themeToggleBtnEl) {
-        themeToggleBtnEl.addEventListener("click", async () => {
-            console.log('Theme toggle clicked.');
-            document.body.classList.toggle('dark-mode');
-            const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-            console.log('New theme to save:', currentTheme);
-            await chrome.storage.local.set({ theme: currentTheme });
-            console.log('Theme saved to storage.');
-            // Note: applyTheme is implicitly handled by the classList.toggle and CSS rules.
-            // If we needed to do more JS-based theme adjustments, we might call applyTheme(currentTheme) here.
-            // For now, also log the body classList to confirm the toggle worked as expected by the click handler.
-            console.log('document.body classList after toggle:', document.body.classList.toString());
-        });
-    }
+    // Removed old direct button listeners for settings & theme, now handled by menu items.
 }
 
 // =================================================================================
@@ -476,6 +551,11 @@ function attachEventListeners() {
  */
 async function init() {
     await loadAndApplyTheme(); // Load theme first
+
+    // Load search visibility preference
+    const searchPrefResult = await chrome.storage.local.get(["isSearchVisible"]);
+    let isSearchVisible = searchPrefResult.isSearchVisible !== undefined ? searchPrefResult.isSearchVisible : true; // Default true
+    applySearchVisibility(isSearchVisible); // Apply visibility on init
 
     const result = await chrome.storage.local.get(["data", "folders"]);
     myData = result.data || [];

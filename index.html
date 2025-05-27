@@ -6,12 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <div id="menu-bar">
-        <button id="settings-btn" class="menu-button">Settings</button>
-        <button id="theme-toggle-btn" class="menu-button">Toggle Theme</button>
-        <!-- Other menu items can be added here later -->
+    <div id="top-bar-container">
+        <button id="hamburger-btn" aria-label="Open menu">&#9776;</button>
     </div>
-    <div class="main-content-area"> <!-- Renamed for clarity or use existing div -->
+    <div id="hamburger-menu" class="menu-panel">
+        <ul>
+            <li><button id="menu-settings-btn">Settings</button></li>
+            <li><button id="menu-theme-toggle-btn">Toggle Theme</button></li>
+            <li><button id="menu-search-toggle-btn">Toggle Search Bar</button></li>
+            <hr class="menu-divider">
+            <li><button id="menu-delete-selected-btn">Delete Selected Notes</button></li>
+            <li><button id="menu-delete-all-btn">Delete All Notes</button></li>
+            <li><button id="menu-clear-data-btn">Clear All Data</button></li>
+        </ul>
+    </div>
+    <div class="main-content-area">
         <div id="search-container">
             <input type="search" id="search-bar" placeholder="Search notes...">
         </div>
@@ -26,9 +35,6 @@
         <div id="action-buttons">
             <button id="save-note-btn">Save Note</button>
             <button id="save-tab">Save Url</button>
-            <button id="delete-selected-notes-btn">Delete Selected</button> 
-            <button id="delete-all-notes-btn">Delete All Notes</button>
-            <button id="clr">Clear All Data</button> 
         </div>
 
         <ul id="store"></ul>
