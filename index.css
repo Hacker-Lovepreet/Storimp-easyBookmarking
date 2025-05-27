@@ -1,42 +1,769 @@
+:root {
+  --bg-color: #f8f8fa; /* Apple-like light gray */
+  --text-color: #1d1d1f; /* Apple's typical dark text color */
+  --primary-accent-color: #007aff; /* Apple's standard blue */
+  --primary-accent-hover-color: #005ecb; /* Darker blue for hover */
+  --secondary-accent-color: #efefef; /* Light gray for menu/toolbars */
+  --secondary-accent-hover-color: #e5e5e5; /* Border for menu/toolbars */
+  --border-color: #dcdcdc; /* Subtle border color */
+  --input-bg-color: #ffffff;
+  --input-border-color: #d0d0d0; /* Slightly softer border for inputs */
+  --button-text-color: white;
+  --note-item-border-color: #e5e5e5; /* Lighter border for list items */
+  --note-list-text-color: #333333; /* Adjusted for better contrast on new bg */
+  --note-folder-tag-bg-color: #e7e7e7;
+  --note-folder-tag-text-color: #555555;
+  --delete-btn-bg-color: #ff3b30; /* Apple's destructive action red */
+  --delete-btn-hover-bg-color: #d92c23;
+  --delete-selected-btn-bg-color: #ff9500; /* Apple's orange */
+  --delete-selected-btn-hover-bg-color: #db7f00;
+  --create-folder-btn-bg-color: #34c759; /* Apple's green */
+  --create-folder-btn-hover-bg-color: #2ca34a;
+  --expand-note-btn-bg-color: #8e8e93; /* Neutral gray for less prominent actions */
+  --expand-note-btn-hover-bg-color: #75757a;
+  --modal-bg-color: #fefefe;
+  --modal-text-color: #1d1d1f;
+  --modal-border-color: #dcdcdc; /* Consistent with other borders */
+  --modal-close-btn-color: #8e8e93;
+  --modal-close-btn-hover-color: #333333;
+  --hr-color: #e5e5e5; /* Very light gray for hr */
+  --scrollbar-thumb-color: #c1c1c1;
+  --scrollbar-track-color: var(--bg-color); /* Match background */
+  --scrollbar-thumb-hover-color: #a0a0a0;
+}
+
+body.dark-mode {
+  --bg-color: #1c1c1e; /* Apple's dark mode background */
+  --text-color: #f5f5f7; /* Apple's light text on dark bg */
+  --primary-accent-color: #0a84ff; /* Brighter blue for dark mode */
+  --primary-accent-hover-color: #0060df;
+  --secondary-accent-color: #2c2c2e; /* Darker gray for menu/toolbars */
+  --secondary-accent-hover-color: #3a3a3c; /* Border for dark menu */
+  --border-color: #424245; /* Subtle border in dark mode */
+  --input-bg-color: #2c2c2e; /* Dark input background */
+  --input-border-color: #545458; /* Softer border for dark inputs */
+  --button-text-color: white;
+  --note-item-border-color: #3a3a3c; /* Lighter border for list items in dark */
+  --note-list-text-color: #e0e0e0;
+  --note-folder-tag-bg-color: #3a3a3c;
+  --note-folder-tag-text-color: #cccccc;
+  --delete-btn-bg-color: #ff453a; /* Brighter red for dark mode */
+  --delete-btn-hover-bg-color: #d9332a;
+  --delete-selected-btn-bg-color: #ff9f0a; /* Brighter orange for dark mode */
+  --delete-selected-btn-hover-bg-color: #db8900;
+  --create-folder-btn-bg-color: #30d158; /* Brighter green for dark mode */
+  --create-folder-btn-hover-bg-color: #29b44c;
+  --expand-note-btn-bg-color: #98989d; /* Lighter gray for dark mode */
+  --expand-note-btn-hover-bg-color: #7c7c80;
+  --modal-bg-color: #2c2c2e; /* Dark modal background */
+  --modal-text-color: #f5f5f7;
+  --modal-border-color: #424245;
+  --modal-close-btn-color: #b0b0b0;
+  --modal-close-btn-hover-color: #f5f5f7;
+  --hr-color: #424245; /* Dark hr */
+  --scrollbar-thumb-color: #555;
+  --scrollbar-track-color: var(--bg-color); /* Match background */
+  --scrollbar-thumb-hover-color: #6a6a6a;
+}
+
+/* Top Bar Container for Hamburger Button */
+#top-bar-container {
+    background-color: var(--secondary-accent-color);
+    padding: 8px 15px; /* Adjusted padding */
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--secondary-accent-hover-color);
+    /* position: sticky; /* If we want it to stick at the top */
+    /* top: 0; */
+    /* z-index: 50; */ /* Ensure it's above other content if sticky */
+}
+
+#hamburger-btn {
+    background: none;
+    border: none;
+    color: var(--text-color); /* Use text color for icon */
+    font-size: 24px; /* Larger hamburger icon */
+    padding: 5px; /* Make it easier to click */
+    cursor: pointer;
+    margin: 0; /* Reset default button margin */
+    line-height: 1; /* Ensure icon is centered */
+}
+#hamburger-btn:hover {
+    background-color: rgba(0,0,0,0.05); /* Subtle hover */
+    border-radius: 4px;
+}
+body.dark-mode #hamburger-btn {
+    color: var(--text-color); /* Ensure it uses dark mode text color */
+}
+body.dark-mode #hamburger-btn:hover {
+    background-color: rgba(255,255,255,0.1); /* Subtle hover for dark mode */
+}
+
+
+/* Hamburger Menu Panel */
+#hamburger-menu {
+    display: none; /* Hidden by default */
+    position: fixed; /* Or absolute, depending on desired behavior */
+    left: 0;
+    top: 0; /* Adjust if top-bar has a fixed height, e.g., top: 50px; */
+    width: 280px; /* Width of the menu */
+    height: 100%;
+    background-color: var(--bg-color); /* Use main background color */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    z-index: 100; /* Ensure it's above other content */
+    padding-top: 20px; /* Space for items */
+    border-right: 1px solid var(--border-color);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%); /* Start off-screen */
+}
+#hamburger-menu.open {
+    display: block; /* Or flex/grid if needed for ul styling */
+    transform: translateX(0);
+}
+
+#hamburger-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#hamburger-menu li button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 12px 20px; /* Generous padding for touch */
+    width: 100%;
+    text-align: left;
+    font-size: 15px; /* Consistent font size */
+    font-family: inherit;
+    cursor: pointer;
+    display: block; /* Ensure it takes full width for click */
+    margin: 0; /* Reset default button margin */
+    border-radius: 0; /* No rounding for menu items */
+}
+
+#hamburger-menu li button:hover {
+    background-color: var(--secondary-accent-color); /* Use secondary for hover */
+}
+body.dark-mode #hamburger-menu li button {
+    color: var(--text-color); /* Ensure dark mode text color */
+}
+body.dark-mode #hamburger-menu li button:hover {
+    background-color: var(--secondary-accent-color); /* Ensure dark mode hover */
+}
+
+.menu-divider {
+    height: 1px;
+    background-color: var(--border-color); /* Use border color for divider */
+    border: none;
+    margin: 10px 0; /* Space around divider */
+}
+
+
 body{
-    margin: 0px;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    padding: 10px;
-    min-width: 400px;
-    background-color: #ccccff;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    min-width: 380px; /* Slightly reduced min-width for flexibility */
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 15px; /* Base font size */
+    line-height: 1.4; /* Improved line height */
+    transition: background-color 0.3s, color 0.3s;
 }
 
-button{
-    margin: 5px 0px;
-    background-color: #8080ff;
-    border-radius: 3px;
-    border: 1px solid #8080ff;
-    font-size: 18px;
-    font-weight: bold;
-    color:white;
-    padding:10px;
+/* Styles for the new Menu Bar - This section can be removed or repurposed if #top-bar-container replaces it entirely */
+/* #menu-bar { ... } */
+/* .menu-button { ... } */
+
+/* Padding for the main content area */
+.main-content-area {
+    padding: 20px; /* Add top padding back if #top-bar-container is not sticky or part of flow */
+    /* If #top-bar-container is sticky, you might need padding-top on main-content-area to avoid overlap */
+    /* e.g., padding-top: 60px; where 60px is height of top-bar */
+    background-color: var(--bg-color); 
+}
+
+/* Search Bar Styling */
+#search-container {
+    margin-bottom: 20px;
+    display: block; /* Initially visible, JS will toggle */
+}
+#search-container.hidden { /* Class to hide search bar */
+    display: none;
+}
+
+#search-bar {
+    width: 100%; 
+    padding: 10px 12px; /* Increased padding */
+    border: 1px solid var(--input-border-color);
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    border-radius: 6px; /* Slightly more rounded */
+    box-sizing: border-box; 
+    font-size: 15px;
+    font-family: inherit; /* Inherit from body */
+}
+#search-bar:focus {
+    outline: none;
+    border-color: var(--primary-accent-color); /* Highlight on focus */
+    box-shadow: 0 0 0 1px var(--primary-accent-color); /* Subtle glow */
 }
 
 
-input{
-    
-    width:100%;
-    padding: 10px;
+/* Minor adjustments for existing elements for consistency */
+hr {
+    margin-top: 20px; 
+    margin-bottom: 20px;
+    border: 0;
+    height: 1px;
+    background-color: var(--hr-color);
+}
+
+#folder-management, #note-title, #action-buttons, #store {
+    margin-bottom: 20px; /* Standardized bottom margin */
+}
+
+#note-content {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px 12px; /* Increased padding */
     box-sizing: border-box;
-    border: 1px solid #8080ff;
-    border-radius: 3px;
+    border: 1px solid var(--input-border-color);
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    border-radius: 6px; /* Slightly more rounded */
+    font-family: inherit; 
+    font-size: 15px; 
+    margin-bottom: 20px; 
+    resize: vertical; 
+}
+#note-content:focus {
+    outline: none;
+    border-color: var(--primary-accent-color);
+    box-shadow: 0 0 0 1px var(--primary-accent-color);
+}
 
+/* General button styles - will be overridden by specific button styles if needed */
+button{
+    margin: 5px; /* Adjusted margin for action buttons row */
+    background-color: var(--primary-accent-color);
+    border-radius: 6px; /* Slightly more rounded */
+    border: none; 
+    font-size: 15px; /* Standardized button font size */
+    font-weight: 500; /* Medium weight */
+    color: var(--button-text-color);
+    padding: 10px 18px; /* Generous padding */
+    cursor: pointer; 
+    transition: background-color 0.2s ease; 
 }
+
+button:hover {
+    background-color: var(--primary-accent-hover-color);
+}
+
+input[type="text"] { 
+    width: 100%;
+    padding: 10px 12px; /* Increased padding */
+    box-sizing: border-box;
+    border: 1px solid var(--input-border-color);
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    border-radius: 6px; /* Slightly more rounded */
+    margin-bottom: 15px; /* Adjusted margin */
+    font-family: inherit;
+    font-size: 15px; /* Consistent with textarea */
+}
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-accent-color);
+    box-shadow: 0 0 0 1px var(--primary-accent-color);
+}
+
+
 #store{
-    color:blue;
-    font-size: 16px;
-    font-weight:bolder;
+    color: var(--note-list-text-color);
+    font-size: 15px;
+    font-weight: normal; 
+    padding-left: 0; /* Remove padding if li has enough */
 }
+
 ul{
     list-style-type: none;
-    margin:0;
-    padding:0px;
+    margin: 0; /* Remove top margin, handled by section margin */
+    padding: 0px;
 }
+
 li{
-    padding:5px 0px;
+    padding: 12px 8px; /* Increased padding */
+    border-bottom: 1px solid var(--note-item-border-color);
+    display: flex;
+    align-items: center;
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
 }
+li:hover {
+    background-color: rgba(0,0,0,0.03); /* Subtle hover for light theme */
+}
+body.dark-mode li:hover {
+    background-color: rgba(255,255,255,0.05); /* Subtle hover for dark theme */
+}
+
+
+li:last-child {
+    border-bottom: none; 
+}
+
+.note-checkbox {
+    margin-right: 12px; /* Slightly more space */
+    flex-shrink: 0; 
+    width: 18px; /* Explicit size */
+    height: 18px; /* Explicit size */
+}
+body.dark-mode .note-checkbox { 
+    accent-color: var(--primary-accent-color);
+}
+
+
+.note-text-content {
+    flex-grow: 1;
+    white-space: pre-wrap; 
+    word-break: break-word;
+    color: var(--text-color); 
+    font-size: 14px; /* Slightly smaller for note content preview */
+    line-height: 1.5;
+}
+.note-text-content strong { /* Ensure title part is bolder */
+    font-weight: 600; /* Semibold */
+    color: var(--text-color); /* Ensure title color matches main text */
+    display: block; /* Make title take its own line */
+    margin-bottom: 4px; /* Space between title and content preview */
+}
+.note-text-content a {
+    color: var(--primary-accent-color); 
+    text-decoration: none; /* Remove underline by default */
+}
+.note-text-content a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+body.dark-mode .note-text-content a {
+    color: var(--primary-accent-color); 
+}
+
+
+#action-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    gap: 8px; /* Space between buttons */
+    justify-content: flex-start; /* Align to start */
+}
+#action-buttons button { 
+    margin: 0; /* Remove individual margins, using gap now */
+    flex-grow: 1; /* Allow buttons to grow and fill space if needed */
+}
+
+
+#delete-selected-notes-btn {
+    background-color: var(--delete-selected-btn-bg-color);
+}
+#delete-selected-notes-btn:hover {
+    background-color: var(--delete-selected-btn-hover-bg-color);
+}
+
+
+.delete-btn { /* Small delete button in list items */
+    background-color: var(--delete-btn-bg-color);
+    color: var(--button-text-color);
+    padding: 4px 8px; /* Adjusted padding */
+    font-size: 12px;
+    font-weight: 500; /* Medium */
+    border: none;
+    border-radius: 5px; /* Consistent rounding */
+    cursor: pointer;
+    margin-left: auto; 
+    flex-shrink: 0; 
+    transition: background-color 0.2s ease;
+}
+
+.delete-btn:hover {
+    background-color: var(--delete-btn-hover-bg-color);
+}
+
+/* Folder Management Section */
+#folder-management {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+#folder-select, #new-folder-name  { 
+    padding: 10px 12px; /* Increased padding */
+    border: 1px solid var(--input-border-color);
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    border-radius: 6px; /* Slightly more rounded */
+    font-family: inherit;
+    font-size: 14px; /* Consistent input font size */
+}
+#folder-select:focus, #new-folder-name:focus {
+    outline: none;
+    border-color: var(--primary-accent-color);
+    box-shadow: 0 0 0 1px var(--primary-accent-color);
+}
+
+#folder-select { flex-grow: 1; }
+#new-folder-name { 
+    width: auto; 
+    flex-grow: 2; 
+    margin-bottom: 0; 
+}
+
+
+#create-folder-btn {
+    padding: 10px 15px; /* Matched other main buttons */
+    font-size: 14px; 
+    font-weight: 500; /* Medium */
+    margin: 0; 
+    background-color: var(--create-folder-btn-bg-color);
+}
+#create-folder-btn:hover {
+    background-color: var(--create-folder-btn-hover-bg-color);
+}
+
+/* Note Folder Tag Styling */
+.note-folder-tag {
+    background-color: var(--note-folder-tag-bg-color);
+    color: var(--note-folder-tag-text-color);
+    padding: 3px 7px; /* Adjusted padding */
+    border-radius: 5px; /* Consistent rounding */
+    font-size: 11px;
+    font-weight: 500; /* Medium */
+    margin-right: 8px; /* More space */
+    display: inline-block; 
+}
+
+/* Modal Styles */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 100; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5); /* Slightly less opaque backdrop */
+}
+
+.modal-content {
+    background-color: var(--modal-bg-color);
+    margin: 10% auto; 
+    padding: 25px; /* Increased padding */
+    border: none; /* Remove border, rely on shadow */
+    width: 90%; /* More responsive */
+    max-width: 550px; /* Slightly wider max */
+    border-radius: 12px; /* More pronounced rounding for modals */
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15); /* Softer, more modern shadow */
+}
+body.dark-mode .modal-content {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3); /* Adjusted shadow for dark mode */
+}
+
+.modal-close-btn {
+    color: var(--modal-close-btn-color);
+    position: absolute; /* Position relative to modal-content */
+    top: 15px; /* Adjust position */
+    right: 15px; /* Adjust position */
+    font-size: 22px; /* Smaller, more subtle */
+    font-weight: normal; /* Not bold */
+    line-height: 1; /* Ensure it doesn't affect layout much */
+    padding: 5px; /* Make it easier to click */
+    background: none; /* No background */
+    border: none; /* No border */
+    cursor: pointer;
+}
+
+.modal-close-btn:hover,
+.modal-close-btn:focus {
+    color: var(--modal-close-btn-hover-color);
+    background-color: rgba(0,0,0,0.05); /* Subtle hover effect */
+    border-radius: 50%; /* Circular hover */
+    text-decoration: none;
+}
+body.dark-mode .modal-close-btn:hover,
+body.dark-mode .modal-close-btn:focus {
+    background-color: rgba(255,255,255,0.1); /* Subtle hover for dark mode */
+}
+
+
+#modal-note-title {
+    margin-top: 0; 
+    margin-bottom: 15px;
+    font-size: 22px; /* Larger title */
+    font-weight: 600; /* Semibold */
+    color: var(--text-color); /* Ensure it uses themed text color */
+}
+
+#modal-note-content {
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    font-size: 16px; /* Slightly larger for readability */
+    line-height: 1.6;
+    color: var(--text-color); /* Ensure it uses themed text color */
+    max-height: 60vh; 
+    overflow-y: auto; 
+}
+#modal-note-content a {
+    color: var(--primary-accent-color); 
+    text-decoration: none;
+}
+#modal-note-content a:hover {
+    text-decoration: underline;
+}
+
+
+/* Expand Note Button Styling */
+.expand-note-btn {
+    background-color: var(--expand-note-btn-bg-color);
+    color: var(--button-text-color);
+    padding: 4px 8px; /* Adjusted padding */
+    font-size: 11px;
+    font-weight: 500; /* Medium */
+    border: none;
+    border-radius: 5px; /* Consistent rounding */
+    cursor: pointer;
+    margin-left: 8px; /* More space */
+    margin-top: 0; 
+    margin-bottom: 0;
+    transition: background-color 0.2s ease;
+}
+
+.expand-note-btn:hover {
+    background-color: var(--expand-note-btn-hover-bg-color);
+}
+
+/* Custom Scrollbar for Webkit browsers */
+::-webkit-scrollbar {
+  width: 10px; /* Slightly wider */
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+  border-radius: 5px; /* Match rounding */
+  border: 2px solid var(--scrollbar-track-color); /* Creates padding around thumb */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color); 
+}
+body.dark-mode ::-webkit-scrollbar-thumb {
+  border-color: var(--scrollbar-track-color);
+}
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-color); 
+}
+
+/* =================================================================================
+   Top Bar and Hamburger Menu Styles
+   ================================================================================= */
+
+#top-bar-container {
+    display: flex;
+    justify-content: flex-start; /* Align hamburger to the left */
+    padding: 8px 15px; 
+    background-color: var(--secondary-accent-color); 
+    border-bottom: 1px solid var(--secondary-accent-hover-color);
+    position: sticky; /* Stick to the top */
+    top: 0;
+    z-index: 50; /* Ensure it's above other content but below the menu panel */
+}
+
+#hamburger-btn {
+    background: none;
+    border: none;
+    font-size: 24px; 
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 5px;
+    margin: 0; 
+    line-height: 1; /* For better vertical alignment of the icon */
+}
+#hamburger-btn:hover {
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 4px;
+}
+body.dark-mode #hamburger-btn {
+    color: var(--text-color);
+}
+body.dark-mode #hamburger-btn:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+#hamburger-menu { /* Renamed from #hamburger-menu.menu-panel for simplicity */
+    display: none; 
+    position: fixed; 
+    left: 0;
+    top: 0; 
+    width: 280px; 
+    height: 100%;
+    background-color: var(--bg-color); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000; /* Higher z-index to be on top of everything */
+    padding: 15px 0; /* Top/bottom padding for the panel */
+    border-right: 1px solid var(--border-color);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%); 
+}
+#hamburger-menu.open {
+    display: block; 
+    transform: translateX(0);
+}
+body.dark-mode #hamburger-menu {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Darker shadow for dark mode */
+}
+
+#hamburger-menu ul {
+    list-style: none; 
+    margin: 0; 
+    padding: 0;
+}
+
+#hamburger-menu li button { /* Targets buttons directly within li */
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 12px 20px; /* Consistent padding for menu items */
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px; 
+    font-weight: 500; /* Medium weight, consistent with other buttons */
+    font-family: inherit; /* Ensure it uses the body font */
+    box-sizing: border-box;
+    margin: 0; /* Reset any default button margins */
+    border-radius: 0; /* Menu items typically are not rounded */
+}
+#hamburger-menu li button:hover {
+    background-color: var(--secondary-accent-hover-color); /* Use a subtle hover, like menu bar items */
+}
+body.dark-mode #hamburger-menu li button {
+    color: var(--text-color); /* Ensure correct text color in dark mode */
+}
+body.dark-mode #hamburger-menu li button:hover {
+    background-color: var(--secondary-accent-hover-color); /* Consistent hover in dark mode */
+}
+
+#hamburger-menu hr.menu-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 10px 0; /* Space around the divider */
+}
+
+/* Main content area adjustment for sticky top bar */
+.main-content-area {
+    /* If #top-bar-container height is dynamic, JS might be needed to set this.
+       Assuming a fixed height for #top-bar-container (e.g. ~45-50px based on padding & font) */
+    padding-top: 60px; /* Add padding to prevent overlap with sticky top-bar */
+}
+
+
+/* Utility class for hiding elements like the search bar */
+.hidden {
+    display: none !important;
+}
+
+/* Hamburger Menu Styles */
+
+/* Top Bar Container for Hamburger Button - Already styled as #top-bar-container */
+/* Styles for #hamburger-btn are already in #top-bar-container section, ensure they match requirements */
+/* Example for #hamburger-btn if it needed overrides or was separate:
+#hamburger-btn {
+    background: none;
+    border: none;
+    font-size: 24px; 
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 5px;
+    margin: 0; 
+}
+#hamburger-btn:hover {
+    opacity: 0.7;
+}
+body.dark-mode #hamburger-btn {
+    color: var(--text-color);
+}
+*/
+
+/* Hamburger Menu Panel - Already styled as #hamburger-menu */
+/* Ensure its .open state and other properties match requirements */
+/* Example for #hamburger-menu.menu-panel if it needed overrides:
+#hamburger-menu.menu-panel {
+    display: none; 
+    position: fixed; 
+    left: 0;
+    top: 0; 
+    width: 280px; 
+    height: 100%;
+    background-color: var(--bg-color); 
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    z-index: 100; 
+    padding-top: 20px; 
+    border-right: 1px solid var(--border-color);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%); 
+}
+#hamburger-menu.menu-panel.open {
+    display: block; 
+    transform: translateX(0);
+}
+body.dark-mode #hamburger-menu.menu-panel {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
+}
+*/
+
+/* Styles for Menu Items - ul, li, button inside #hamburger-menu are already styled */
+/* Ensure they match requirements, especially: */
+/*
+#hamburger-menu ul {
+    list-style: none; margin: 0; padding: 0;
+}
+#hamburger-menu li button {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 10px 15px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px; 
+    font-weight: normal; 
+}
+#hamburger-menu li button:hover {
+    background-color: var(--note-item-border-color); 
+}
+body.dark-mode #hamburger-menu li button {
+    color: var(--text-color);
+}
+body.dark-mode #hamburger-menu li button:hover {
+    background-color: var(--border-color); 
+}
+*/
+
+/* Menu Divider - hr.menu-divider is already styled */
+/* Ensure it matches requirements:
+#hamburger-menu hr.menu-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 8px 0;
+}
+*/
+
+/* Hidden Class for Search Bar - .hidden class for #search-container is already styled */
+/* Ensure it matches requirements:
+.hidden {
+    display: none !important;
+}
+*/
