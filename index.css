@@ -1,122 +1,104 @@
 :root {
-  --bg-color: #f0f2f5; /* Light grayish-blue background */
-  --text-color: #333333; /* Dark text */
-  --primary-accent-color: #6a6aff; /* Existing button blue */
-  --primary-accent-hover-color: #5050cc;
-  --secondary-accent-color: #4a4a70; /* Menu bar background */
-  --secondary-accent-hover-color: #303050; /* Menu bar border */
-  --border-color: #cccccc;
+  --bg-color: #f8f8fa; /* Apple-like light gray */
+  --text-color: #1d1d1f; /* Apple's typical dark text color */
+  --primary-accent-color: #007aff; /* Apple's standard blue */
+  --primary-accent-hover-color: #005ecb; /* Darker blue for hover */
+  --secondary-accent-color: #efefef; /* Light gray for menu/toolbars */
+  --secondary-accent-hover-color: #e5e5e5; /* Border for menu/toolbars */
+  --border-color: #dcdcdc; /* Subtle border color */
   --input-bg-color: #ffffff;
-  --input-border-color: #b0b0e0;
+  --input-border-color: #d0d0d0; /* Slightly softer border for inputs */
   --button-text-color: white;
-  --note-item-border-color: #e0e0ff;
-  --note-list-text-color: #404080;
-  --note-folder-tag-bg-color: #e0e0ff;
-  --note-folder-tag-text-color: #505080;
-  --delete-btn-bg-color: #ff6666;
-  --delete-btn-hover-bg-color: #cc0000;
-  --delete-selected-btn-bg-color: #f0ad4e;
-  --delete-selected-btn-hover-bg-color: #ec971f;
-  --create-folder-btn-bg-color: #5cb85c;
-  --create-folder-btn-hover-bg-color: #4cae4c;
-  --expand-note-btn-bg-color: #7777cc;
-  --expand-note-btn-hover-bg-color: #5050aa;
+  --note-item-border-color: #e5e5e5; /* Lighter border for list items */
+  --note-list-text-color: #333333; /* Adjusted for better contrast on new bg */
+  --note-folder-tag-bg-color: #e7e7e7;
+  --note-folder-tag-text-color: #555555;
+  --delete-btn-bg-color: #ff3b30; /* Apple's destructive action red */
+  --delete-btn-hover-bg-color: #d92c23;
+  --delete-selected-btn-bg-color: #ff9500; /* Apple's orange */
+  --delete-selected-btn-hover-bg-color: #db7f00;
+  --create-folder-btn-bg-color: #34c759; /* Apple's green */
+  --create-folder-btn-hover-bg-color: #2ca34a;
+  --expand-note-btn-bg-color: #8e8e93; /* Neutral gray for less prominent actions */
+  --expand-note-btn-hover-bg-color: #75757a;
   --modal-bg-color: #fefefe;
-  --modal-text-color: #333333;
-  --modal-border-color: #888;
-  --modal-close-btn-color: #aaa;
-  --modal-close-btn-hover-color: black;
-  --hr-color: #c0c0ff;
+  --modal-text-color: #1d1d1f;
+  --modal-border-color: #dcdcdc; /* Consistent with other borders */
+  --modal-close-btn-color: #8e8e93;
+  --modal-close-btn-hover-color: #333333;
+  --hr-color: #e5e5e5; /* Very light gray for hr */
   --scrollbar-thumb-color: #c1c1c1;
-  --scrollbar-track-color: #f1f1f1;
+  --scrollbar-track-color: var(--bg-color); /* Match background */
   --scrollbar-thumb-hover-color: #a0a0a0;
-
-
-  /* Quill Specific - Light Theme */
-  --quill-toolbar-bg: #f9f9f9;
-  --quill-editor-bg: var(--input-bg-color);
-  --quill-text-color: var(--text-color);
-  --quill-border-color: var(--border-color);
-  --quill-toolbar-button-stroke: #444; /* Default snow theme stroke */
-  --quill-toolbar-button-fill: #444;   /* Default snow theme fill */
-  --quill-toolbar-button-hover-bg: #efefef;
-  --quill-toolbar-button-active-bg: #e0e0e0;
 }
 
 body.dark-mode {
-  --bg-color: #2c2f33; /* Dark background */
-  --text-color: #e0e0e0; /* Light text */
-  --primary-accent-color: #7a7aff; /* Slightly lighter blue for dark mode */
-  --primary-accent-hover-color: #6060dd;
-  --secondary-accent-color: #3a3a5a; /* Darker menu bar */
-  --secondary-accent-hover-color: #202040;
-  --border-color: #555555;
-  --input-bg-color: #383c42;
-  --input-border-color: #7a7aff;
+  --bg-color: #1c1c1e; /* Apple's dark mode background */
+  --text-color: #f5f5f7; /* Apple's light text on dark bg */
+  --primary-accent-color: #0a84ff; /* Brighter blue for dark mode */
+  --primary-accent-hover-color: #0060df;
+  --secondary-accent-color: #2c2c2e; /* Darker gray for menu/toolbars */
+  --secondary-accent-hover-color: #3a3a3c; /* Border for dark menu */
+  --border-color: #424245; /* Subtle border in dark mode */
+  --input-bg-color: #2c2c2e; /* Dark input background */
+  --input-border-color: #545458; /* Softer border for dark inputs */
   --button-text-color: white;
-  --note-item-border-color: #444448;
-  --note-list-text-color: #c0c0e0;
-  --note-folder-tag-bg-color: #4f4f70;
-  --note-folder-tag-text-color: #d0d0f0;
-  --delete-btn-bg-color: #d9534f;
-  --delete-btn-hover-bg-color: #c9302c;
-  --delete-selected-btn-bg-color: #eea236;
-  --delete-selected-btn-hover-bg-color: #d58512;
-  --create-folder-btn-bg-color: #4cae4c;
-  --create-folder-btn-hover-bg-color: #398439;
-  --expand-note-btn-bg-color: #6767bb;
-  --expand-note-btn-hover-bg-color: #40409a;
-  --modal-bg-color: #3a3a3a;
-  --modal-text-color: #e0e0e0;
-  --modal-border-color: #666;
-  --modal-close-btn-color: #ccc;
-  --modal-close-btn-hover-color: white;
-  --hr-color: #555555;
+  --note-item-border-color: #3a3a3c; /* Lighter border for list items in dark */
+  --note-list-text-color: #e0e0e0;
+  --note-folder-tag-bg-color: #3a3a3c;
+  --note-folder-tag-text-color: #cccccc;
+  --delete-btn-bg-color: #ff453a; /* Brighter red for dark mode */
+  --delete-btn-hover-bg-color: #d9332a;
+  --delete-selected-btn-bg-color: #ff9f0a; /* Brighter orange for dark mode */
+  --delete-selected-btn-hover-bg-color: #db8900;
+  --create-folder-btn-bg-color: #30d158; /* Brighter green for dark mode */
+  --create-folder-btn-hover-bg-color: #29b44c;
+  --expand-note-btn-bg-color: #98989d; /* Lighter gray for dark mode */
+  --expand-note-btn-hover-bg-color: #7c7c80;
+  --modal-bg-color: #2c2c2e; /* Dark modal background */
+  --modal-text-color: #f5f5f7;
+  --modal-border-color: #424245;
+  --modal-close-btn-color: #b0b0b0;
+  --modal-close-btn-hover-color: #f5f5f7;
+  --hr-color: #424245; /* Dark hr */
   --scrollbar-thumb-color: #555;
-  --scrollbar-track-color: #333;
+  --scrollbar-track-color: var(--bg-color); /* Match background */
   --scrollbar-thumb-hover-color: #6a6a6a;
-
-  /* Quill Specific - Dark Theme */
-  --quill-toolbar-bg: #383c42;
-  --quill-editor-bg: var(--input-bg-color); /* This is #383c42 */
-  --quill-text-color: var(--text-color); /* This is #e0e0e0 */
-  --quill-border-color: var(--border-color); /* This is #555555 */
-  --quill-toolbar-button-stroke: var(--text-color); /* #e0e0e0 */
-  --quill-toolbar-button-fill: var(--text-color); /* #e0e0e0 */
-  --quill-toolbar-button-hover-bg: #4f4f70;
-  --quill-toolbar-button-active-bg: #5a5a80;
 }
 
 
 body{
-    margin: 0px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    min-width: 400px;
-    background: var(--bg-color); /* Using gradient from before, will replace with simple color */
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    min-width: 380px; /* Slightly reduced min-width for flexibility */
+    background: var(--bg-color);
     color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s; /* Smooth theme transition */
+    font-size: 15px; /* Base font size */
+    line-height: 1.4; /* Improved line height */
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* Styles for the new Menu Bar */
 #menu-bar {
   background-color: var(--secondary-accent-color);
-  padding: 8px 10px;
+  padding: 10px 15px; /* Increased padding */
   border-bottom: 1px solid var(--secondary-accent-hover-color);
-  margin-bottom: 15px; 
+  margin-bottom: 20px; /* Increased margin */
   display: flex; 
   align-items: center;
 }
 
 .menu-button { 
   background-color: var(--primary-accent-color);
-  border: 1px solid var(--primary-accent-hover-color);
+  border: none; /* Removed border for flatter Apple style */
   color: var(--button-text-color);
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 6px 12px; /* Adjusted padding */
+  border-radius: 6px; /* Slightly more rounded */
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500; /* Medium weight */
   margin-right: 10px; 
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
 .menu-button:hover {
@@ -125,157 +107,100 @@ body{
 
 /* Padding for the main content area */
 .main-content-area {
-    padding: 15px;
-    background-color: var(--bg-color); /* Ensure this area also follows theme */
+    padding: 0 20px 20px 20px; /* Consistent horizontal padding, remove top padding if menu-bar provides enough space */
+    background-color: var(--bg-color); 
 }
 
 /* Search Bar Styling */
 #search-container {
-    margin-bottom: 15px; 
+    margin-bottom: 20px; 
 }
 
 #search-bar {
     width: 100%; 
-    padding: 8px 10px;
+    padding: 10px 12px; /* Increased padding */
     border: 1px solid var(--input-border-color);
     background-color: var(--input-bg-color);
     color: var(--text-color);
-    border-radius: 5px; 
+    border-radius: 6px; /* Slightly more rounded */
     box-sizing: border-box; 
     font-size: 15px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    font-family: inherit; /* Inherit from body */
 }
+#search-bar:focus {
+    outline: none;
+    border-color: var(--primary-accent-color); /* Highlight on focus */
+    box-shadow: 0 0 0 1px var(--primary-accent-color); /* Subtle glow */
+}
+
 
 /* Minor adjustments for existing elements for consistency */
 hr {
-    margin-top: 15px; 
-    margin-bottom: 15px;
+    margin-top: 20px; 
+    margin-bottom: 20px;
     border: 0;
     height: 1px;
     background-color: var(--hr-color);
 }
 
-#settings-section, #folder-management, #note-title, #action-buttons, #store {
-    margin-bottom: 15px; /* Standard bottom margin for sections */
-}
-#editor-container { /* Combined with note-title's old margin */
-    margin-bottom: 15px;
+#folder-management, #note-title, #action-buttons, #store {
+    margin-bottom: 20px; /* Standardized bottom margin */
 }
 
+#note-content {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px 12px; /* Increased padding */
+    box-sizing: border-box;
+    border: 1px solid var(--input-border-color);
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    border-radius: 6px; /* Slightly more rounded */
+    font-family: inherit; 
+    font-size: 15px; 
+    margin-bottom: 20px; 
+    resize: vertical; 
+}
+#note-content:focus {
+    outline: none;
+    border-color: var(--primary-accent-color);
+    box-shadow: 0 0 0 1px var(--primary-accent-color);
+}
 
 /* General button styles - will be overridden by specific button styles if needed */
 button{
-    margin: 8px 2px; 
+    margin: 5px; /* Adjusted margin for action buttons row */
     background-color: var(--primary-accent-color);
-    border-radius: 5px; 
+    border-radius: 6px; /* Slightly more rounded */
     border: none; 
-    font-size: 16px; 
-    font-weight: bold;
+    font-size: 15px; /* Standardized button font size */
+    font-weight: 500; /* Medium weight */
     color: var(--button-text-color);
-    padding: 10px 15px; 
+    padding: 10px 18px; /* Generous padding */
     cursor: pointer; 
-    transition: background-color 0.3s ease; 
+    transition: background-color 0.2s ease; 
 }
 
 button:hover {
     background-color: var(--primary-accent-hover-color);
 }
 
-input[type="text"] { /* Note: textarea is removed */
+input[type="text"] { 
     width: 100%;
-    padding: 12px;
+    padding: 10px 12px; /* Increased padding */
     box-sizing: border-box;
     border: 1px solid var(--input-border-color);
     background-color: var(--input-bg-color);
     color: var(--text-color);
-    border-radius: 5px;
-    margin-bottom: 10px; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
+    border-radius: 6px; /* Slightly more rounded */
+    margin-bottom: 15px; /* Adjusted margin */
+    font-family: inherit;
+    font-size: 15px; /* Consistent with textarea */
 }
-
-/* Quill Editor Container */
-#editor-container {
-  min-height: 150px; 
-  border: 1px solid var(--quill-border-color);
-  border-radius: 4px;
-  /* margin-bottom already set with other sections */
-  background-color: var(--quill-editor-bg); /* Use specific quill var */
-}
-
-.ql-editor { 
-    min-height: 150px; 
-    font-size: 14px; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    padding: 10px; 
-    color: var(--quill-text-color);
-    background-color: var(--quill-editor-bg);
-}
-body.dark-mode .ql-editor {
-    background-color: var(--quill-editor-bg) !important;
-    color: var(--quill-text-color) !important;
-}
-
-/* Quill placeholder text color */
-.ql-editor.ql-blank::before{
-    color: var(--quill-text-color);
-    opacity: 0.6;
-}
-body.dark-mode .ql-editor.ql-blank::before{
-    color: rgba(224, 224, 224, 0.7) !important; /* Using --text-color for dark mode with opacity */
-    /* opacity: 0.7 !important; /* Ensure opacity is also forced if needed, but color usually includes it */
-}
-
-
-.ql-toolbar.ql-snow { 
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom: 1px solid var(--quill-border-color);
-    background-color: var(--quill-toolbar-bg);
-}
-body.dark-mode .ql-toolbar.ql-snow {
-    background-color: var(--quill-toolbar-bg) !important;
-    border-color: var(--quill-border-color) !important;
-}
-
-/* Quill SVG Icons theming */
-body.dark-mode .ql-snow .ql-stroke { stroke: var(--quill-toolbar-button-stroke) !important; }
-body.dark-mode .ql-snow .ql-fill { fill: var(--quill-toolbar-button-fill) !important; }
-body.dark-mode .ql-snow .ql-picker-label { color: var(--quill-toolbar-button-stroke) !important; }
-body.dark-mode .ql-snow .ql-picker-options { 
-    background-color: var(--quill-toolbar-bg) !important; /* Use toolbar bg for consistency */
-    border-color: var(--quill-border-color) !important; 
-}
-body.dark-mode .ql-snow .ql-picker-item { color: var(--quill-toolbar-button-stroke) !important; } /* Ensure text color for items */
-
-body.dark-mode .ql-snow .ql-picker-item:hover { 
-    background-color: var(--quill-toolbar-button-hover-bg) !important; 
-    color: var(--primary-accent-color) !important; /* Ensure text color changes on hover */
-}
-body.dark-mode .ql-snow .ql-picker-item.ql-selected { 
-    background-color: var(--quill-toolbar-button-active-bg) !important; 
-    color: var(--primary-accent-color) !important; /* Ensure text color for selected */
-}
-
-/* Hover/active states for toolbar buttons */
-body.dark-mode .ql-snow button:hover .ql-stroke,
-body.dark-mode .ql-snow button:focus .ql-stroke,
-body.dark-mode .ql-snow button.ql-active .ql-stroke,
-body.dark-mode .ql-snow .ql-picker-label:hover .ql-stroke, /* Picker label stroke on hover */
-body.dark-mode .ql-snow .ql-picker-label.ql-active .ql-stroke { /* Picker label stroke when active */
-    stroke: var(--primary-accent-color) !important; 
-}
-body.dark-mode .ql-snow button:hover .ql-fill,
-body.dark-mode .ql-snow button:focus .ql-fill,
-body.dark-mode .ql-snow button.ql-active .ql-fill {
-    fill: var(--primary-accent-color) !important; 
-}
-/* Ensure picker label text color changes on hover/active if it's separate from stroke/fill */
-body.dark-mode .ql-snow .ql-picker-label:hover {
-    color: var(--primary-accent-color) !important;
-}
-body.dark-mode .ql-snow .ql-picker-label.ql-active {
-    color: var(--primary-accent-color) !important;
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-accent-color);
+    box-shadow: 0 0 0 1px var(--primary-accent-color);
 }
 
 
@@ -283,33 +208,42 @@ body.dark-mode .ql-snow .ql-picker-label.ql-active {
     color: var(--note-list-text-color);
     font-size: 15px;
     font-weight: normal; 
-    padding-left: 5px; 
+    padding-left: 0; /* Remove padding if li has enough */
 }
 
 ul{
     list-style-type: none;
-    margin: 10px 0 0 0; 
+    margin: 0; /* Remove top margin, handled by section margin */
     padding: 0px;
 }
 
 li{
-    padding: 10px 5px; 
+    padding: 12px 8px; /* Increased padding */
     border-bottom: 1px solid var(--note-item-border-color);
     display: flex;
     align-items: center;
     word-wrap: break-word; 
     overflow-wrap: break-word; 
 }
+li:hover {
+    background-color: rgba(0,0,0,0.03); /* Subtle hover for light theme */
+}
+body.dark-mode li:hover {
+    background-color: rgba(255,255,255,0.05); /* Subtle hover for dark theme */
+}
+
 
 li:last-child {
     border-bottom: none; 
 }
 
 .note-checkbox {
-    margin-right: 10px; 
+    margin-right: 12px; /* Slightly more space */
     flex-shrink: 0; 
+    width: 18px; /* Explicit size */
+    height: 18px; /* Explicit size */
 }
-body.dark-mode .note-checkbox { /* Basic dark mode for checkbox */
+body.dark-mode .note-checkbox { 
     accent-color: var(--primary-accent-color);
 }
 
@@ -318,19 +252,39 @@ body.dark-mode .note-checkbox { /* Basic dark mode for checkbox */
     flex-grow: 1;
     white-space: pre-wrap; 
     word-break: break-word;
-    color: var(--text-color); /* Ensure note text content follows theme */
+    color: var(--text-color); 
+    font-size: 14px; /* Slightly smaller for note content preview */
+    line-height: 1.5;
+}
+.note-text-content strong { /* Ensure title part is bolder */
+    font-weight: 600; /* Semibold */
+    color: var(--text-color); /* Ensure title color matches main text */
+    display: block; /* Make title take its own line */
+    margin-bottom: 4px; /* Space between title and content preview */
 }
 .note-text-content a {
-    color: var(--primary-accent-color); /* Link color */
+    color: var(--primary-accent-color); 
+    text-decoration: none; /* Remove underline by default */
+}
+.note-text-content a:hover {
+    text-decoration: underline; /* Underline on hover */
 }
 body.dark-mode .note-text-content a {
-    color: var(--primary-accent-color); /* Ensure links are visible in dark mode */
+    color: var(--primary-accent-color); 
 }
 
 
+#action-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    gap: 8px; /* Space between buttons */
+    justify-content: flex-start; /* Align to start */
+}
 #action-buttons button { 
-    margin: 5px; 
+    margin: 0; /* Remove individual margins, using gap now */
+    flex-grow: 1; /* Allow buttons to grow and fill space if needed */
 }
+
 
 #delete-selected-notes-btn {
     background-color: var(--delete-selected-btn-bg-color);
@@ -340,17 +294,18 @@ body.dark-mode .note-text-content a {
 }
 
 
-.delete-btn {
+.delete-btn { /* Small delete button in list items */
     background-color: var(--delete-btn-bg-color);
     color: var(--button-text-color);
-    padding: 5px 10px;
+    padding: 4px 8px; /* Adjusted padding */
     font-size: 12px;
+    font-weight: 500; /* Medium */
     border: none;
-    border-radius: 4px;
+    border-radius: 5px; /* Consistent rounding */
     cursor: pointer;
     margin-left: auto; 
     flex-shrink: 0; 
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
 }
 
 .delete-btn:hover {
@@ -362,29 +317,35 @@ body.dark-mode .note-text-content a {
     display: flex;
     align-items: center;
     gap: 10px; 
-    /* margin-bottom is already set with other sections */
 }
 
-#folder-select, #new-folder-name  { /* Grouped common styles */
-    padding: 8px;
+#folder-select, #new-folder-name  { 
+    padding: 10px 12px; /* Increased padding */
     border: 1px solid var(--input-border-color);
     background-color: var(--input-bg-color);
     color: var(--text-color);
-    border-radius: 5px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
+    border-radius: 6px; /* Slightly more rounded */
+    font-family: inherit;
+    font-size: 14px; /* Consistent input font size */
 }
+#folder-select:focus, #new-folder-name:focus {
+    outline: none;
+    border-color: var(--primary-accent-color);
+    box-shadow: 0 0 0 1px var(--primary-accent-color);
+}
+
 #folder-select { flex-grow: 1; }
 #new-folder-name { 
     width: auto; 
     flex-grow: 2; 
-    margin-bottom: 0; /* Overrides general input margin-bottom */
+    margin-bottom: 0; 
 }
 
 
 #create-folder-btn {
-    padding: 8px 12px; 
+    padding: 10px 15px; /* Matched other main buttons */
     font-size: 14px; 
+    font-weight: 500; /* Medium */
     margin: 0; 
     background-color: var(--create-folder-btn-bg-color);
 }
@@ -396,10 +357,11 @@ body.dark-mode .note-text-content a {
 .note-folder-tag {
     background-color: var(--note-folder-tag-bg-color);
     color: var(--note-folder-tag-text-color);
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 3px 7px; /* Adjusted padding */
+    border-radius: 5px; /* Consistent rounding */
     font-size: 11px;
-    margin-right: 5px;
+    font-weight: 500; /* Medium */
+    margin-right: 8px; /* More space */
     display: inline-block; 
 }
 
@@ -413,54 +375,74 @@ body.dark-mode .note-text-content a {
     width: 100%;
     height: 100%;
     overflow: auto; 
-    background-color: rgba(0,0,0,0.6); /* This is a backdrop, might not need theme variable */
+    background-color: rgba(0,0,0,0.5); /* Slightly less opaque backdrop */
 }
 
 .modal-content {
     background-color: var(--modal-bg-color);
     margin: 10% auto; 
-    padding: 20px;
-    border: 1px solid var(--modal-border-color);
-    width: 80%;
-    max-width: 500px;
-    border-radius: 5px;
+    padding: 25px; /* Increased padding */
+    border: none; /* Remove border, rely on shadow */
+    width: 90%; /* More responsive */
+    max-width: 550px; /* Slightly wider max */
+    border-radius: 12px; /* More pronounced rounding for modals */
     position: relative;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15); /* Softer, more modern shadow */
+}
+body.dark-mode .modal-content {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3); /* Adjusted shadow for dark mode */
 }
 
 .modal-close-btn {
     color: var(--modal-close-btn-color);
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+    position: absolute; /* Position relative to modal-content */
+    top: 15px; /* Adjust position */
+    right: 15px; /* Adjust position */
+    font-size: 22px; /* Smaller, more subtle */
+    font-weight: normal; /* Not bold */
+    line-height: 1; /* Ensure it doesn't affect layout much */
+    padding: 5px; /* Make it easier to click */
+    background: none; /* No background */
+    border: none; /* No border */
     cursor: pointer;
 }
 
 .modal-close-btn:hover,
 .modal-close-btn:focus {
     color: var(--modal-close-btn-hover-color);
+    background-color: rgba(0,0,0,0.05); /* Subtle hover effect */
+    border-radius: 50%; /* Circular hover */
     text-decoration: none;
-    cursor: pointer;
 }
+body.dark-mode .modal-close-btn:hover,
+body.dark-mode .modal-close-btn:focus {
+    background-color: rgba(255,255,255,0.1); /* Subtle hover for dark mode */
+}
+
 
 #modal-note-title {
     margin-top: 0; 
     margin-bottom: 15px;
-    font-size: 20px;
-    color: var(--modal-text-color);
+    font-size: 22px; /* Larger title */
+    font-weight: 600; /* Semibold */
+    color: var(--text-color); /* Ensure it uses themed text color */
 }
 
 #modal-note-content {
     white-space: pre-wrap; 
     word-wrap: break-word; 
-    font-size: 15px;
+    font-size: 16px; /* Slightly larger for readability */
     line-height: 1.6;
-    color: var(--modal-text-color);
+    color: var(--text-color); /* Ensure it uses themed text color */
     max-height: 60vh; 
     overflow-y: auto; 
 }
 #modal-note-content a {
-    color: var(--primary-accent-color); /* Ensure links in modal are themed */
+    color: var(--primary-accent-color); 
+    text-decoration: none;
+}
+#modal-note-content a:hover {
+    text-decoration: underline;
 }
 
 
@@ -468,14 +450,16 @@ body.dark-mode .note-text-content a {
 .expand-note-btn {
     background-color: var(--expand-note-btn-bg-color);
     color: var(--button-text-color);
-    padding: 3px 8px;
+    padding: 4px 8px; /* Adjusted padding */
     font-size: 11px;
+    font-weight: 500; /* Medium */
     border: none;
-    border-radius: 3px;
+    border-radius: 5px; /* Consistent rounding */
     cursor: pointer;
-    margin-left: 5px; 
+    margin-left: 8px; /* More space */
     margin-top: 0; 
     margin-bottom: 0;
+    transition: background-color 0.2s ease;
 }
 
 .expand-note-btn:hover {
@@ -484,17 +468,21 @@ body.dark-mode .note-text-content a {
 
 /* Custom Scrollbar for Webkit browsers */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px; /* Slightly wider */
 }
 ::-webkit-scrollbar-track {
   background: var(--scrollbar-track-color);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb-color);
-  border-radius: 4px;
+  border-radius: 5px; /* Match rounding */
+  border: 2px solid var(--scrollbar-track-color); /* Creates padding around thumb */
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover-color); 
+}
+body.dark-mode ::-webkit-scrollbar-thumb {
+  border-color: var(--scrollbar-track-color);
 }
 body.dark-mode ::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-thumb-hover-color); 

@@ -3,8 +3,6 @@
 <head>
     <title>Storimp</title>
     <link rel="stylesheet" href="index.css">
-    <!-- Quill.js Snow Theme CSS (CDN) -->
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -17,11 +15,6 @@
         <div id="search-container">
             <input type="search" id="search-bar" placeholder="Search notes...">
         </div>
-        <div id="settings-section">
-            <label for="auto-capture-toggle">Auto-capture Copied Text:</label>
-            <input type="checkbox" id="auto-capture-toggle">
-        </div>
-        <hr>
         <div id="folder-management">
             <select id="folder-select"></select>
             <input type="text" id="new-folder-name" placeholder="New folder name...">
@@ -29,10 +22,7 @@
         </div>
         <hr> 
         <input type="text" id="note-title" placeholder="Note Title"><br>
-        <!-- Quill Editor Placeholder -->
-        <div id="editor-container">
-            <div id="note-editor"></div> 
-        </div>
+        <textarea id="note-content" placeholder="Take a note..."></textarea>
         <div id="action-buttons">
             <button id="save-note-btn">Save Note</button>
             <button id="save-tab">Save Url</button>
@@ -53,8 +43,6 @@
       </div>
     </div>
 
-    <!-- Quill.js JS (CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.min.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

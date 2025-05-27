@@ -23,15 +23,9 @@ const folderSelectEl = document.getElementById("folder-select");
 const newFolderInputEl = document.getElementById("new-folder-name");
 const createFolderBtnEl = document.getElementById("create-folder-btn");
 
-// Settings Elements
-const autoCaptureToggleEl = document.getElementById("auto-capture-toggle");
-
 // =================================================================================
 // Global State (Loaded from chrome.storage.local in init)
 // =================================================================================
-let quill; // Quill editor instance
-console.log('Global quill variable declared.'); // Early log for variable declaration
-
 /**
  * @type {Array<Object>} myData - Array of note objects.
  * Stored in chrome.storage.local under the key "data".
@@ -81,31 +75,28 @@ function populateFolderSelect() {
  */
 function createNoteListItemHTML(noteItem, originalIndex, currentSelectedFolder) {
     const title = noteItem.title ? noteItem.title : "No Title";
-    const fullContentHTML = noteItem.content ? noteItem.content : ""; // Full HTML content
+    const content = noteItem.content ? noteItem.content : "";
     let displayContentPreviewHTML = "";
     let expandButtonHTML = "";
 
     if (noteItem.isLink) {
-        displayContentPreviewHTML = `<strong>${title}</strong><br><a href="${fullContentHTML}" target="_blank">${fullContentHTML}</a>`;
+        displayContentPreviewHTML = `<strong>${title}</strong><br><a href="${content}" target="_blank">${content}</a>`;
     } else {
-        console.log('Generating list preview for note content (HTML):', fullContentHTML);
-        // For rich text, create a temporary div to get text content for preview
+        // Create a temporary div to get text content for preview from HTML content
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = fullContentHTML;
+        tempDiv.innerHTML = content; // 'content' here is fullContentHTML
         const textPreview = tempDiv.textContent || tempDiv.innerText || "";
-        console.log('Generated text preview:', textPreview);
-
 
         if (textPreview.length > MAX_NOTE_CONTENT_PREVIEW_LENGTH) {
-            // Show truncated text preview, but the full content is HTML
             displayContentPreviewHTML = `<strong>${title}</strong><br>${textPreview.substring(0, MAX_NOTE_CONTENT_PREVIEW_LENGTH)}...`;
             expandButtonHTML = `<button class="expand-note-btn" data-note-original-index="${originalIndex}">Expand</button>`;
         } else {
             displayContentPreviewHTML = `<strong>${title}</strong><br>${textPreview}`;
-             // Ensure expand button appears if original content had formatting, even if text preview is short
-             if (fullContentHTML.includes('<') && !fullContentHTML.startsWith('<a href') && fullContentHTML !== textPreview ) { 
+            // Also show expand button if the original HTML content was longer than the text preview
+            // (e.g. content had many tags but little text, or if textPreview is short but there was formatting)
+            if (content !== textPreview && content.length > textPreview.length) {
                  expandButtonHTML = `<button class="expand-note-btn" data-note-original-index="${originalIndex}">Expand</button>`;
-             }
+            }
         }
     }
 
@@ -201,11 +192,9 @@ async function handleCreateFolder() {
  * Handles saving a new note.
  */
 async function handleSaveNote() {
-    console.log('Attempting to save note. Quill instance:', quill);
     const title = noteTitleEl.value.trim();
-    const contentHTML = quill.root.innerHTML; 
-    console.log('Quill HTML content captured:', contentHTML);
-    const textContent = quill.getText().trim(); 
+    const content = document.getElementById('note-content').value;
+    const textContent = content.trim();
 
     let selectedFolderForSave = folderSelectEl.value;
 
@@ -213,17 +202,13 @@ async function handleSaveNote() {
         selectedFolderForSave = DEFAULT_FOLDER;
     }
 
-    if (title || textContent.length > 0) { 
-        const newNote = { title: title, content: contentHTML, folder: selectedFolderForSave, isLink: false };
-        console.log('New note object to be saved:', newNote);
+    if (title || textContent.length > 0) {
+        const newNote = { title: title, content: content, folder: selectedFolderForSave, isLink: false };
         myData.push(newNote);
         await saveDataToStorage();
         renderNotes();
         noteTitleEl.value = "";
-        quill.setText(''); 
-        console.log('Quill editor cleared.');
-    } else {
-        console.log('Save note aborted: title and content are empty.');
+        document.getElementById('note-content').value = '';
     }
 }
 
@@ -269,13 +254,11 @@ async function handleDeleteNote(originalIndexToDelete) {
  */
 async function handleClearAllData() {
     if (confirm("Are you sure you want to delete ALL data, including notes AND folders? This action cannot be undone.")) {
-        // Clear notes, folders, and also reset lastCopiedText and auto-capture setting for a full reset.
-        await chrome.storage.local.remove(["data", "folders", "lastCopiedText"]);
-        await chrome.storage.local.set({ isAutoCaptureEnabled: false }); 
+        // Clear notes, folders
+        await chrome.storage.local.remove(["data", "folders"]);
         
         myData = [];
         myFolders = [];
-        autoCaptureToggleEl.checked = false; // Update UI for auto-capture
 
         populateFolderSelect();
         renderNotes();
@@ -289,17 +272,8 @@ async function handleDeleteAllNotes() {
     if (confirm("Are you sure you want to delete all notes? Your folders will remain. This action cannot be undone.")) {
         myData = [];
         await saveDataToStorage(); // Saves the empty myData array
-        await chrome.storage.local.set({ lastCopiedText: "" }); // Reset lastCopiedText
         renderNotes();
     }
-}
-
-/**
- * Handles changes to the auto-capture toggle.
- */
-async function handleAutoCaptureToggleChange() {
-    await chrome.storage.local.set({ isAutoCaptureEnabled: autoCaptureToggleEl.checked });
-    console.log("Auto-capture setting saved:", autoCaptureToggleEl.checked);
 }
 
 /**
@@ -337,14 +311,16 @@ function openNoteModal(originalIndex) {
     const note = myData[noteIndex]; 
 
     if (note) {
-        console.log('Opening modal for note. Title:', note.title, 'HTML Content:', note.content);
         modalNoteTitleEl.textContent = note.title || "Note";
         if (note.isLink) {
             modalNoteContentEl.innerHTML = `<a href="${note.content}" target="_blank">${note.content}</a>`;
         } else {
-            modalNoteContentEl.innerHTML = note.content || ""; 
+            // For plain text, we can set textContent directly to avoid potential XSS
+            // if content ever accidentally contains HTML-like strings.
+            // However, if markdown or simple HTML was intended to be rendered, use innerHTML.
+            // For old notes, we want to render HTML. For new notes, it's plain text.
+            modalNoteContentEl.innerHTML = note.content || "";
         }
-        console.log('Modal content set with innerHTML.');
         noteModalEl.style.display = "block";
     } else {
         console.error("Note not found for modal display, index:", noteIndex);
@@ -410,7 +386,6 @@ function attachEventListeners() {
     if (clrEl) clrEl.addEventListener("click", handleClearAllData);
     if (storeEl) storeEl.addEventListener("click", handleStoreElClick); // Delegated for delete and expand buttons
     if (folderSelectEl) folderSelectEl.addEventListener("change", renderNotes);
-    if (autoCaptureToggleEl) autoCaptureToggleEl.addEventListener("change", handleAutoCaptureToggleChange);
 
     // Modal listeners
     if (modalCloseBtnEl) { 
@@ -467,33 +442,10 @@ function attachEventListeners() {
 async function init() {
     await loadAndApplyTheme(); // Load theme first
 
-    // Initialize Quill Editor
-    if (document.getElementById('note-editor')) {
-        quill = new Quill('#note-editor', {
-            modules: {
-              toolbar: [
-                [{ 'header': [1, 2, false] }],
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['clean'] 
-              ]
-            },
-            placeholder: 'Take a note...',
-            theme: 'snow'
-        });
-        console.log('Quill initialized:', quill ? 'Success' : 'Failed');
-    } else {
-        console.error("Quill editor placeholder #note-editor not found.");
-    }
-
-    const result = await chrome.storage.local.get(["data", "folders", "isAutoCaptureEnabled"]);
+    const result = await chrome.storage.local.get(["data", "folders"]);
     myData = result.data || [];
     myFolders = result.folders || [];
     
-    if (autoCaptureToggleEl) { 
-         autoCaptureToggleEl.checked = result.isAutoCaptureEnabled || false;
-    }
-
     if (folderSelectEl) { 
         populateFolderSelect();
     }

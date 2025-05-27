@@ -8,9 +8,7 @@
     },
     "permissions": [
         "tabs",
-        "clipboardRead",
-        "storage",
-        "offscreen"
+        "storage"
     ],
     "background": {
         "service_worker": "background.js",
