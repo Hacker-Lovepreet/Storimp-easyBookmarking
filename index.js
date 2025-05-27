@@ -109,7 +109,7 @@ function createNoteListItemHTML(noteItem, originalIndex, currentSelectedFolder) 
     // For simplicity, placing it within the flow here.
     return `<li>
                 <input type="checkbox" class="note-checkbox" data-note-original-index="${originalIndex}">
-                <div class="note-text-content">${folderDisplayHTML}${displayContentHTML} ${expandButtonHTML}</div>
+                <div class="note-text-content">${folderDisplayHTML}${displayContentPreviewHTML} ${expandButtonHTML}</div>
                 <button class="delete-btn" data-original-index="${originalIndex}">Delete</button>
             </li>`;
 }
