@@ -22,6 +22,7 @@ const modalNoteContentEl = document.getElementById("modal-note-content");
 const folderSelectEl = document.getElementById("folder-select");
 const newFolderInputEl = document.getElementById("new-folder-name");
 const createFolderBtnEl = document.getElementById("create-folder-btn");
+const searchBarEl = document.getElementById("search-bar");
 
 // =================================================================================
 // Global State (Loaded from chrome.storage.local in init)
@@ -134,15 +135,35 @@ function getFilteredNotes(selectedFolder) {
 /**
  * Renders the notes list in the UI based on the currently selected folder.
  */
-function renderNotes() {
+function renderNotes(searchTerm = "") { // Add searchTerm parameter
     if (!storeEl || !folderSelectEl) { // Ensure elements are available (e.g. if popup is closed quickly)
         return;
     }
     const selectedFolder = folderSelectEl.value;
     const notesToRender = getFilteredNotes(selectedFolder);
 
+    let finalNotesToRender = notesToRender;
+    if (searchTerm && searchTerm.trim() !== "") {
+        const lowerCaseSearchTerm = searchTerm.trim().toLowerCase();
+        finalNotesToRender = notesToRender.filter(noteItem => {
+            const titleMatch = noteItem.title && noteItem.title.toLowerCase().includes(lowerCaseSearchTerm);
+            let contentMatch = false;
+            if (noteItem.isLink) {
+                // For links, content is the URL
+                contentMatch = noteItem.content && noteItem.content.toLowerCase().includes(lowerCaseSearchTerm);
+            } else {
+                // For text notes, use textPreview logic to search actual text content
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = noteItem.content || "";
+                const textContent = (tempDiv.textContent || tempDiv.innerText || "").toLowerCase();
+                contentMatch = textContent.includes(lowerCaseSearchTerm);
+            }
+            return titleMatch || contentMatch;
+        });
+    }
+
     let notesHTML = "";
-    notesToRender.forEach(noteItemWithOriginalIndex => {
+    finalNotesToRender.forEach(noteItemWithOriginalIndex => {
         notesHTML += createNoteListItemHTML(noteItemWithOriginalIndex, noteItemWithOriginalIndex.originalIndex, selectedFolder);
     });
     storeEl.innerHTML = notesHTML;
@@ -385,7 +406,21 @@ function attachEventListeners() {
     if (deleteSelectedNotesBtnEl) deleteSelectedNotesBtnEl.addEventListener("click", handleDeleteSelectedNotes);
     if (clrEl) clrEl.addEventListener("click", handleClearAllData);
     if (storeEl) storeEl.addEventListener("click", handleStoreElClick); // Delegated for delete and expand buttons
-    if (folderSelectEl) folderSelectEl.addEventListener("change", renderNotes);
+    
+    if (folderSelectEl) {
+        folderSelectEl.addEventListener("change", () => {
+            if (searchBarEl) { // If search bar exists
+                searchBarEl.value = ""; // Clear search bar
+            }
+            renderNotes(); // Render with no search term
+        });
+    }
+
+    if (searchBarEl) {
+        searchBarEl.addEventListener("input", () => {
+            renderNotes(searchBarEl.value);
+        });
+    }
 
     // Modal listeners
     if (modalCloseBtnEl) { 
