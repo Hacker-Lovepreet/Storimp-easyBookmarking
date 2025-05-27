@@ -66,6 +66,31 @@ body.dark-mode {
   --scrollbar-thumb-hover-color: #6a6a6a;
 }
 
+/* =================================================================================
+   Animations & Transitions
+   ================================================================================= */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.note-item-fade-in {
+    opacity: 0; /* Start transparent for the animation */
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes buttonPress {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+.button-pressed {
+    animation: buttonPress 0.2s ease-out;
+}
+
+
 /* Top Bar Container for Hamburger Button */
 #top-bar-container {
     background-color: var(--secondary-accent-color);
@@ -300,6 +325,7 @@ li{
     align-items: center;
     word-wrap: break-word; 
     overflow-wrap: break-word; 
+    /* opacity: 0; REMOVED - As per instruction, only items with .note-item-fade-in will initially be transparent */
 }
 li:hover {
     background-color: rgba(0,0,0,0.03); /* Subtle hover for light theme */
@@ -443,7 +469,7 @@ body.dark-mode .note-text-content a {
 
 /* Modal Styles */
 .modal {
-    display: none; 
+    /* display: none; /* REMOVED: To be managed by JS for transitions */
     position: fixed; 
     z-index: 100; 
     left: 0;
@@ -452,6 +478,17 @@ body.dark-mode .note-text-content a {
     height: 100%;
     overflow: auto; 
     background-color: rgba(0,0,0,0.5); /* Slightly less opaque backdrop */
+    opacity: 0; /* Start fully transparent */
+    transform: scale(0.95) translateY(-20px); /* Slightly scaled down and moved up */
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    pointer-events: none; /* Ensure pointer-events: none when not visible */
+}
+
+.modal.open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto; /* Allow interaction when open */
+    /* display: block; /* This will be set by JS before adding the .open class */
 }
 
 .modal-content {

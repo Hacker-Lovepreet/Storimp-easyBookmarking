@@ -32,6 +32,22 @@ const createFolderBtnEl = document.getElementById("create-folder-btn");
 const searchBarEl = document.getElementById("search-bar");
 
 // =================================================================================
+// Animation Functions
+// =================================================================================
+
+/**
+ * Applies a press animation to a button element.
+ * @param {HTMLElement} buttonElement - The button to animate.
+ */
+function animateButtonPress(buttonElement) {
+    if (!buttonElement) return;
+    buttonElement.classList.add('button-pressed');
+    setTimeout(() => {
+        buttonElement.classList.remove('button-pressed');
+    }, 200); // Duration of the buttonPress animation (should match CSS)
+}
+
+// =================================================================================
 // Global State (Loaded from chrome.storage.local in init)
 // =================================================================================
 /**
@@ -174,6 +190,15 @@ function renderNotes(searchTerm = "") { // Add searchTerm parameter
         notesHTML += createNoteListItemHTML(noteItemWithOriginalIndex, noteItemWithOriginalIndex.originalIndex, selectedFolder);
     });
     storeEl.innerHTML = notesHTML;
+
+    // Staggered fade-in for new note items
+    const noteItems = storeEl.querySelectorAll('li');
+    noteItems.forEach((item, index) => {
+        item.classList.remove('note-item-fade-in'); // Good practice: remove if already there
+        setTimeout(() => {
+            item.classList.add('note-item-fade-in');
+        }, index * 50); // 50ms stagger
+    });
 }
 
 // =================================================================================
@@ -349,16 +374,31 @@ function openNoteModal(originalIndex) {
             // For old notes, we want to render HTML. For new notes, it's plain text.
             modalNoteContentEl.innerHTML = note.content || "";
         }
-        noteModalEl.style.display = "block";
+        // noteModalEl.style.display = "block"; // Old direct way
+        noteModalEl.style.display = "block"; // Make it visible
+        noteModalEl.offsetHeight; // Force a reflow
+        noteModalEl.classList.add("open"); // Add class to trigger transition
+
     } else {
         console.error("Note not found for modal display, index:", noteIndex);
     }
 }
 
 function closeNoteModal() {
-    noteModalEl.style.display = "none";
-    modalNoteContentEl.innerHTML = ""; 
-    console.log('Modal closed and content cleared.');
+    // noteModalEl.style.display = "none"; // Old direct way
+    // modalNoteContentEl.innerHTML = ""; 
+    // console.log('Modal closed and content cleared.');
+    noteModalEl.classList.remove("open");
+
+    const onTransitionEnd = () => {
+        noteModalEl.style.display = "none";
+        modalNoteContentEl.innerHTML = ""; // Clear content after transition
+        console.log('Modal closed and content cleared after transition.');
+        // No need to removeEventListener if { once: true } is used and supported,
+        // but explicit removal is safer for broader compatibility or if `once` is omitted.
+        // noteModalEl.removeEventListener('transitionend', onTransitionEnd); // Covered by {once: true}
+    };
+    noteModalEl.addEventListener('transitionend', onTransitionEnd, { once: true });
 }
 
 // =================================================================================
@@ -398,6 +438,8 @@ async function loadAndApplyTheme() {
 // Hamburger Menu Toggle Function
 function toggleHamburgerMenu() {
     if (hamburgerMenuEl) {
+        // Animate button press for hamburger a bit differently as it's not a standard button event target for animation in other handlers
+        // animateButtonPress(hamburgerBtnEl); // This could be called here or in its direct listener
         hamburgerMenuEl.classList.toggle("open");
     }
 }
@@ -447,18 +489,35 @@ function handleOpenSettings() {
 
 function handleStoreElClick(event) {
     if (event.target.classList.contains("delete-btn")) {
+        animateButtonPress(event.target); // Animate
         const originalIndexToDelete = parseInt(event.target.dataset.originalIndex, 10);
         handleDeleteNote(originalIndexToDelete);
     } else if (event.target.classList.contains("expand-note-btn")) {
+        animateButtonPress(event.target); // Animate
         const originalIndexToExpand = event.target.dataset.noteOriginalIndex;
         openNoteModal(originalIndexToExpand);
     }
 }
 
 function attachEventListeners() {
-    if (saveNoteBtnEl) saveNoteBtnEl.addEventListener("click", handleSaveNote);
-    if (createFolderBtnEl) createFolderBtnEl.addEventListener("click", handleCreateFolder);
-    if (saveTabBtnEl) saveTabBtnEl.addEventListener("click", handleSaveTab);
+    if (saveNoteBtnEl) {
+        saveNoteBtnEl.addEventListener("click", (event) => {
+            animateButtonPress(event.currentTarget);
+            handleSaveNote();
+        });
+    }
+    if (createFolderBtnEl) {
+        createFolderBtnEl.addEventListener("click", (event) => {
+            animateButtonPress(event.currentTarget);
+            handleCreateFolder();
+        });
+    }
+    if (saveTabBtnEl) {
+        saveTabBtnEl.addEventListener("click", (event) => {
+            animateButtonPress(event.currentTarget);
+            handleSaveTab();
+        });
+    }
     // Removed old direct button listeners for delete actions, settings, theme
 
     if (storeEl) storeEl.addEventListener("click", handleStoreElClick); // Delegated for delete and expand buttons
@@ -480,7 +539,10 @@ function attachEventListeners() {
 
     // Hamburger Menu Listeners
     if (hamburgerBtnEl) {
-        hamburgerBtnEl.addEventListener("click", toggleHamburgerMenu);
+        hamburgerBtnEl.addEventListener("click", (event) => {
+            animateButtonPress(event.currentTarget);
+            toggleHamburgerMenu();
+        });
     }
     // Close menu if clicking outside of it (on the main content area)
     // This needs to be more robust if main-content-area doesn't cover everything or if there are other clickable bg elements.
@@ -496,28 +558,34 @@ function attachEventListeners() {
 
 
     // New Menu Item Listeners
-    if (menuSettingsBtnEl) menuSettingsBtnEl.addEventListener("click", () => {
+    if (menuSettingsBtnEl) menuSettingsBtnEl.addEventListener("click", (event) => {
+        animateButtonPress(event.currentTarget);
         handleOpenSettings();
         toggleHamburgerMenu(); // Close menu after action
     });
-    if (menuThemeToggleBtnEl) menuThemeToggleBtnEl.addEventListener("click", () => {
+    if (menuThemeToggleBtnEl) menuThemeToggleBtnEl.addEventListener("click", (event) => {
+        animateButtonPress(event.currentTarget);
         handleThemeToggle();
         // Theme toggle is visual, so menu can stay open or be closed. Let's close it for consistency.
         toggleHamburgerMenu();
     });
-    if (menuSearchToggleBtnEl) menuSearchToggleBtnEl.addEventListener("click", () => {
+    if (menuSearchToggleBtnEl) menuSearchToggleBtnEl.addEventListener("click", (event) => {
+        animateButtonPress(event.currentTarget);
         handleToggleSearchBar(); // Use the new handler
         toggleHamburgerMenu(); // Close menu after action
     });
-    if (menuDeleteSelectedBtnEl) menuDeleteSelectedBtnEl.addEventListener("click", () => {
+    if (menuDeleteSelectedBtnEl) menuDeleteSelectedBtnEl.addEventListener("click", (event) => {
+        animateButtonPress(event.currentTarget);
         handleDeleteSelectedNotes();
         toggleHamburgerMenu(); // Close menu after action
     });
-    if (menuDeleteAllBtnEl) menuDeleteAllBtnEl.addEventListener("click", () => {
+    if (menuDeleteAllBtnEl) menuDeleteAllBtnEl.addEventListener("click", (event) => {
+        animateButtonPress(event.currentTarget);
         handleDeleteAllNotes();
         toggleHamburgerMenu(); // Close menu after action
     });
-    if (menuClearDataBtnEl) menuClearDataBtnEl.addEventListener("click", () => {
+    if (menuClearDataBtnEl) menuClearDataBtnEl.addEventListener("click", (event) => {
+        animateButtonPress(event.currentTarget);
         handleClearAllData();
         toggleHamburgerMenu(); // Close menu after action
     });
@@ -525,9 +593,13 @@ function attachEventListeners() {
 
     // Modal listeners
     if (modalCloseBtnEl) { 
-        modalCloseBtnEl.addEventListener("click", closeNoteModal);
+        modalCloseBtnEl.addEventListener("click", (event) => {
+            animateButtonPress(event.currentTarget);
+            closeNoteModal();
+        });
         window.addEventListener("click", (event) => {
             if (event.target === noteModalEl) { 
+                // Not animating the backdrop click for closing modal, as it's not a button.
                 closeNoteModal();
             }
         });
