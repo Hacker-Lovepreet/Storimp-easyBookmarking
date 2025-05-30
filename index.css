@@ -244,9 +244,18 @@ body.dark-mode #hamburger-menu li button:hover {
     font-weight: 500; /* Match button font weight */
     color: var(--text-color);
 }
-#hamburger-menu .menu-item-label .icon {
-    /* Icons are already in spans, can add specific styling if needed */
-    /* e.g., font-size: 1.1em; */
+/* Renamed .icon to .menu-icon in HTML for consistency */
+#hamburger-menu .menu-item-label .menu-icon, 
+#hamburger-menu li button .menu-icon {
+    font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", "Twemoji Mozilla", sans-serif;
+    /* Optional: Adjust size or alignment if needed, though flex on parent should handle alignment */
+    /* font-size: 1.1em; */ /* Example: make icon slightly larger than text */
+    /* display: inline-block; */ /* Already part of flex item, should be fine */
+}
+
+/* Ensure button text itself uses the body's primary font stack */
+#hamburger-menu li button {
+    font-family: inherit; /* This should make the text part use the body font */
 }
 
 
@@ -636,7 +645,7 @@ body.dark-mode .note-text-content a {
 .modal {
     /* display: none; /* REMOVED: To be managed by JS for transitions */
     position: fixed; 
-    z-index: 100; 
+    z-index: 1050; /* Ensure modals are above hamburger menu (1000) and top bar (50) */
     left: 0;
     top: 0;
     width: 100%;
