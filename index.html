@@ -8,33 +8,42 @@
 <body>
     <div id="top-bar-container">
         <button id="hamburger-btn" aria-label="Open menu">&#9776;</button>
+        <button id="current-folder-btn">All Notes</button>
+        <button id="search-icon-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg></button>
     </div>
     <div id="hamburger-menu" class="menu-panel">
         <ul>
-            <li><button id="menu-settings-btn">Settings</button></li>
-            <li><button id="menu-theme-toggle-btn">Toggle Theme</button></li>
-            <li><button id="menu-search-toggle-btn">Toggle Search Bar</button></li>
+            <li><button id="menu-settings-btn">⚙️ Settings</button></li>
+            <li class="interactive-menu-item">
+                <span class="menu-item-label"><span class="icon">🌓</span> Toggle Theme</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="theme-toggle-switch">
+                    <span class="slider round"></span>
+                </label>
+            </li>
+            <li class="interactive-menu-item">
+                <span class="menu-item-label"><span class="icon">🔍</span> Enable Search Bar</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="search-toggle-switch">
+                    <span class="slider round"></span>
+                </label>
+            </li>
             <hr class="menu-divider">
-            <li><button id="menu-delete-selected-btn">Delete Selected Notes</button></li>
-            <li><button id="menu-delete-all-btn">Delete All Notes</button></li>
-            <li><button id="menu-clear-data-btn">Clear All Data</button></li>
+            <li><button id="menu-delete-selected-btn">🗑️ Delete Selected Notes</button></li>
+            <li><button id="menu-delete-all-btn">🗑️ Delete All Notes</button></li>
+            <li><button id="menu-clear-data-btn">⚠️ Clear All Data</button></li>
         </ul>
     </div>
     <div class="main-content-area">
         <div id="search-container">
             <input type="search" id="search-bar" placeholder="Search notes...">
         </div>
-        <div id="folder-management">
-            <select id="folder-select"></select>
-            <input type="text" id="new-folder-name" placeholder="New folder name...">
-            <button id="create-folder-btn">Create Folder</button>
-        </div>
         <hr> 
-        <input type="text" id="note-title" placeholder="Note Title"><br>
+        <input type="text" id="note-title" placeholder="Note Title">
         <textarea id="note-content" placeholder="Take a note..."></textarea>
         <div id="action-buttons">
             <button id="save-note-btn">Save Note</button>
-            <button id="save-tab">Save Url</button>
+            <button id="save-tab">Save URL</button>
         </div>
 
         <ul id="store"></ul>
@@ -50,5 +59,19 @@
     </div>
 
     <script src="index.js"></script>
+
+    <div id="folder-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close-btn" id="folder-modal-close-btn">&times;</span>
+            <h3>Manage Folders</h3>
+            <ul id="folder-modal-list">
+                <!-- Folder items will be populated by JS -->
+            </ul>
+            <div id="create-folder-modal-section">
+                <input type="text" id="new-folder-modal-input" placeholder="New folder name...">
+                <button id="create-folder-modal-btn">Create Folder</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

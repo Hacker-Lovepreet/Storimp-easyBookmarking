@@ -3,21 +3,45 @@
 <head>
   <meta charset="utf-8">
   <title>Storimp Settings</title>
-  <link rel="stylesheet" href="index.css"> <!-- Optional: reuse existing styles -->
-  <style>
-    body { padding: 20px; }
-    h1 { text-align: center; }
+  <link rel="stylesheet" href="index.css"> <!-- Reuse main styles -->
+  <style> /* Specific styles for settings page layout - can be moved to index.css */
+    body.settings-page { padding: 20px; max-width: 600px; margin: auto; background-color: var(--bg-color); color: var(--text-color); font-family: var(--body-font-family, 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif); line-height: var(--body-line-height, 1.5); font-size: var(--body-font-size, 16px); }
+    body.settings-page.dark-mode { /* Ensure dark mode variables apply */ }
+    .settings-header { text-align: center; margin-bottom: 30px; color: var(--text-color); }
+    .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--border-color); }
+    .setting-item:last-child { border-bottom: none; }
+    .setting-label { display: flex; align-items: center; gap: 12px; font-size: 1.05em; }
+    .setting-label .icon { font-size: 1.2em; }
+    #settings-default-folder-select { padding: 8px 10px; border-radius: 6px; border: 1px solid var(--input-border-color); background-color: var(--input-bg-color); color: var(--text-color); min-width: 150px;}
+    #settings-default-folder-select:disabled { opacity: 0.7; }
   </style>
 </head>
-<body>
-  <h1>Storimp Settings</h1>
-  <p>Future settings will appear here. For example, you might be able to configure:</p>
-  <ul>
-    <li>Default folder for new notes</li>
-    <li>Automatic backup options</li>
-    <li>Theme preferences</li>
-  </ul>
-  <!-- Placeholder for actual settings later -->
+<body class="settings-page"> <!-- Base class for settings -->
+  <h1 class="settings-header">Storimp Settings</h1>
+
+  <div class="setting-item">
+    <span class="setting-label"><span class="icon">🌓</span> Theme</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="settings-theme-toggle">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="setting-item">
+    <span class="setting-label"><span class="icon">🔍</span> Enable Search Bar Feature</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="settings-search-toggle">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="setting-item">
+    <span class="setting-label"><span class="icon">📁</span> Default Folder (Coming Soon)</span>
+    <select id="settings-default-folder-select" disabled>
+        <option>Uncategorized</option>
+    </select>
+  </div>
+
   <script src="settings.js"></script>
 </body>
 </html>

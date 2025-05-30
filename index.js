@@ -11,8 +11,8 @@ const saveTabBtnEl = document.getElementById("save-tab"); // Save Tab button
 const hamburgerBtnEl = document.getElementById("hamburger-btn");
 const hamburgerMenuEl = document.getElementById("hamburger-menu");
 const menuSettingsBtnEl = document.getElementById("menu-settings-btn");
-const menuThemeToggleBtnEl = document.getElementById("menu-theme-toggle-btn");
-const menuSearchToggleBtnEl = document.getElementById("menu-search-toggle-btn");
+const themeToggleSwitchEl = document.getElementById("theme-toggle-switch"); // New
+const searchToggleSwitchEl = document.getElementById("search-toggle-switch"); // New
 const menuDeleteSelectedBtnEl = document.getElementById("menu-delete-selected-btn");
 const menuDeleteAllBtnEl = document.getElementById("menu-delete-all-btn");
 const menuClearDataBtnEl = document.getElementById("menu-clear-data-btn");
@@ -26,10 +26,17 @@ const modalNoteTitleEl = document.getElementById("modal-note-title");
 const modalNoteContentEl = document.getElementById("modal-note-content");
 
 // Folder Management Elements
-const folderSelectEl = document.getElementById("folder-select");
-const newFolderInputEl = document.getElementById("new-folder-name");
-const createFolderBtnEl = document.getElementById("create-folder-btn");
 const searchBarEl = document.getElementById("search-bar");
+const searchIconBtnEl = document.getElementById("search-icon-btn"); // New search icon
+
+// New Folder Management Elements (Top Bar Button & Modal)
+const currentFolderBtnEl = document.getElementById("current-folder-btn");
+const folderModalEl = document.getElementById("folder-modal");
+const folderModalCloseBtnEl = document.getElementById("folder-modal-close-btn");
+const folderModalListEl = document.getElementById("folder-modal-list");
+const newFolderModalInputEl = document.getElementById("new-folder-modal-input");
+const createFolderModalBtnEl = document.getElementById("create-folder-modal-btn");
+
 
 // =================================================================================
 // Animation Functions
@@ -63,7 +70,8 @@ let myData = [];
 let myFolders = [];
 
 const DEFAULT_FOLDER = "uncategorized";
-const ALL_NOTES_FOLDER_VALUE = "all";
+const ALL_NOTES_FOLDER_VALUE = "all"; // Represents "All Notes"
+let currentSelectedFolder = ALL_NOTES_FOLDER_VALUE; // Initialize with "All Notes"
 const MAX_NOTE_CONTENT_PREVIEW_LENGTH = 100; // Max characters to show in list view for text-only part
 
 // =================================================================================
@@ -71,27 +79,15 @@ const MAX_NOTE_CONTENT_PREVIEW_LENGTH = 100; // Max characters to show in list v
 // =================================================================================
 
 /**
- * Populates the folder selection dropdown with default options and user-created folders.
+ * Updates the text of the #current-folder-btn to reflect the currentSelectedFolder.
  */
-function populateFolderSelect() {
-    folderSelectEl.innerHTML = ""; // Clear existing options
-
-    const allNotesOption = document.createElement("option");
-    allNotesOption.value = ALL_NOTES_FOLDER_VALUE;
-    allNotesOption.textContent = "All Notes";
-    folderSelectEl.appendChild(allNotesOption);
-
-    const uncategorizedOption = document.createElement("option");
-    uncategorizedOption.value = DEFAULT_FOLDER;
-    uncategorizedOption.textContent = "Uncategorized";
-    folderSelectEl.appendChild(uncategorizedOption);
-
-    myFolders.forEach(folder => {
-        const option = document.createElement("option");
-        option.value = folder;
-        option.textContent = folder;
-        folderSelectEl.appendChild(option);
-    });
+function updateCurrentFolderButtonText() {
+    if (currentFolderBtnEl) {
+        const folderName = currentSelectedFolder === ALL_NOTES_FOLDER_VALUE ? "All Notes" :
+                           currentSelectedFolder === DEFAULT_FOLDER ? "Uncategorized" :
+                           currentSelectedFolder;
+        currentFolderBtnEl.textContent = folderName;
+    }
 }
 
 /**
@@ -159,10 +155,11 @@ function getFilteredNotes(selectedFolder) {
  * Renders the notes list in the UI based on the currently selected folder.
  */
 function renderNotes(searchTerm = "") { // Add searchTerm parameter
-    if (!storeEl || !folderSelectEl) { // Ensure elements are available (e.g. if popup is closed quickly)
+    if (!storeEl) { // folderSelectEl removed
         return;
     }
-    const selectedFolder = folderSelectEl.value;
+    // const selectedFolder = folderSelectEl.value; // Old way
+    const selectedFolder = currentSelectedFolder; // New way
     const notesToRender = getFilteredNotes(selectedFolder);
 
     let finalNotesToRender = notesToRender;
@@ -220,38 +217,6 @@ async function saveFoldersToStorage() {
 }
 
 /**
- * Handles the creation of a new folder.
- */
-async function handleCreateFolder() {
-    const newFolderName = newFolderInputEl.value.trim();
-    if (!newFolderName) {
-        alert("Folder name cannot be empty.");
-        return;
-    }
-    if (myFolders.includes(newFolderName) || newFolderName === ALL_NOTES_FOLDER_VALUE || newFolderName === DEFAULT_FOLDER) {
-        alert("Folder name already exists or is a reserved name.");
-        return;
-    }
-
-    myFolders.push(newFolderName);
-    await saveFoldersToStorage();
-    populateFolderSelect();
-    folderSelectEl.value = newFolderName; // The new folder is now selected
-
-    // Highlight the newly added folder option
-    const newOption = Array.from(folderSelectEl.options).find(opt => opt.value === newFolderName);
-    if (newOption) {
-        newOption.classList.add('newly-added-folder');
-        setTimeout(() => {
-            newOption.classList.remove('newly-added-folder');
-        }, 1500); // Duration of the animation (matches CSS)
-    }
-
-    newFolderInputEl.value = "";
-    renderNotes();
-}
-
-/**
  * Handles saving a new note.
  */
 async function handleSaveNote() {
@@ -259,7 +224,8 @@ async function handleSaveNote() {
     const content = document.getElementById('note-content').value;
     const textContent = content.trim();
 
-    let selectedFolderForSave = folderSelectEl.value;
+    // let selectedFolderForSave = folderSelectEl.value; // Old way
+    let selectedFolderForSave = currentSelectedFolder; // New way
 
     if (selectedFolderForSave === ALL_NOTES_FOLDER_VALUE) {
         selectedFolderForSave = DEFAULT_FOLDER;
@@ -283,7 +249,8 @@ function handleSaveTab() {
         if (tabs && tabs[0] && tabs[0].url) {
             const url = tabs[0].url;
             const pageTitle = tabs[0].title || url;
-            let selectedFolderForSave = folderSelectEl.value;
+            // let selectedFolderForSave = folderSelectEl.value; // Old way
+            let selectedFolderForSave = currentSelectedFolder; // New way
 
             if (selectedFolderForSave === ALL_NOTES_FOLDER_VALUE) {
                 selectedFolderForSave = DEFAULT_FOLDER;
@@ -323,7 +290,10 @@ async function handleClearAllData() {
         myData = [];
         myFolders = [];
 
-        populateFolderSelect();
+        // populateFolderSelect(); // Old way
+        // Instead of populateFolderSelect, ensure the modal list and button text are updated if needed
+        updateCurrentFolderButtonText(); // Current folder might not exist anymore
+        // Folder modal list will be repopulated when next opened.
         renderNotes();
     }
 }
@@ -365,6 +335,96 @@ async function handleDeleteSelectedNotes() {
 // =================================================================================
 // Modal Interaction Functions
 // =================================================================================
+
+// Folder Modal Functions
+
+/**
+ * Populates the folder list in the folder management modal.
+ */
+function populateFolderModalList() {
+    if (!folderModalListEl) return;
+    folderModalListEl.innerHTML = ""; // Clear existing items
+
+    const items = [
+        { name: "All Notes", value: ALL_NOTES_FOLDER_VALUE },
+        { name: "Uncategorized", value: DEFAULT_FOLDER }
+    ];
+
+    myFolders.forEach(folder => {
+        items.push({ name: folder, value: folder });
+    });
+
+    items.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.name;
+        li.dataset.folderValue = item.value;
+        if (item.value === currentSelectedFolder) {
+            li.classList.add("selected-folder");
+        }
+        folderModalListEl.appendChild(li);
+    });
+}
+
+
+async function handleCreateNewFolderInModal() {
+    if (!newFolderModalInputEl) return;
+    const newFolderName = newFolderModalInputEl.value.trim();
+
+    if (!newFolderName) {
+        alert("Folder name cannot be empty.");
+        return;
+    }
+    if (myFolders.includes(newFolderName) || newFolderName === ALL_NOTES_FOLDER_VALUE || newFolderName === DEFAULT_FOLDER) {
+        alert("Folder name already exists or is a reserved name (All Notes, Uncategorized).");
+        return;
+    }
+
+    myFolders.push(newFolderName);
+    await saveFoldersToStorage();
+    
+    populateFolderModalList(); // Refresh the list in the modal
+    
+    // Highlight the newly added folder in the modal list
+    const folderItems = folderModalListEl.querySelectorAll('li');
+    folderItems.forEach(item => {
+        if (item.dataset.folderValue === newFolderName) {
+            item.classList.add('newly-added-folder-modal-item');
+            setTimeout(() => {
+                item.classList.remove('newly-added-folder-modal-item');
+            }, 2000); // Remove highlight after 2 seconds
+        }
+    });
+    
+    newFolderModalInputEl.value = ""; // Clear the input
+
+    // Optionally, select the newly created folder
+    // currentSelectedFolder = newFolderName;
+    // updateCurrentFolderButtonText();
+    // renderNotes(); 
+    // closeFolderModal(); // Or keep modal open to create more
+}
+
+
+function openFolderModal() {
+    if (folderModalEl) {
+        populateFolderModalList(); // Populate the list each time it's opened
+        folderModalEl.style.display = "block";
+        folderModalEl.offsetHeight; // Force reflow
+        folderModalEl.classList.add("open");
+    }
+}
+
+function closeFolderModal() {
+    if (folderModalEl) {
+        folderModalEl.classList.remove("open");
+        folderModalEl.addEventListener('transitionend', () => {
+            folderModalEl.style.display = "none";
+        }, { once: true });
+    }
+}
+
+
+// Note Modal Functions
 function openNoteModal(originalIndex) {
     const noteIndex = parseInt(originalIndex, 10);
     if (isNaN(noteIndex) || noteIndex < 0 || noteIndex >= myData.length) {
@@ -454,83 +514,70 @@ function toggleHamburgerMenu() {
     }
 }
 
-// Function to apply search visibility and update button text
-function applySearchVisibility(isVisible) {
-    if (!searchContainerEl || !menuSearchToggleBtnEl) return;
+// Function to apply search visibility
+function applySearchVisibility(isSearchFeatureEnabled) {
+    if (!searchContainerEl || !searchIconBtnEl || !searchToggleSwitchEl) return;
 
-    if (isVisible) {
-        // Prepare to show:
-        searchContainerEl.classList.remove('hidden'); // Remove old direct hide class if used
-        searchContainerEl.style.display = 'block'; // Ensure it's not display:none for scrollHeight calculation
-
-        // Set height to auto temporarily to measure its natural height, then set to scrollHeight for animation
-        const currentDisplay = searchContainerEl.style.display; // Store current display
-        searchContainerEl.style.height = 'auto'; // Allow it to take full height for measurement
-        const scrollHeight = searchContainerEl.scrollHeight;
-        
-        // If it was previously hidden-animated, it might have height 0.
-        // We need to set it to 0 before removing hidden-animated to ensure transition starts correctly.
-        if (searchContainerEl.classList.contains('hidden-animated')) {
-            searchContainerEl.style.height = '0px';
-        } else {
-            // If it was visible and just toggling text, or initial load, set its current scrollHeight
-             searchContainerEl.style.height = scrollHeight + 'px';
+    if (isSearchFeatureEnabled) {
+        searchIconBtnEl.style.display = ''; // Show search icon
+        if (!searchContainerEl.classList.contains('hidden-animated')) {
+            // If search was enabled and visible, then disabled, then re-enabled,
+            // we want it to start hidden but ready to be shown by icon.
+            // So, if it's currently visible (no hidden-animated class), hide it.
+            searchContainerEl.style.height = searchContainerEl.scrollHeight + 'px'; // Set for transition
+            void searchContainerEl.offsetHeight; // Reflow
+            searchContainerEl.classList.add('hidden-animated'); // Hide it initially
         }
+
+    } else { // Search feature is disabled
+        searchIconBtnEl.style.display = 'none'; // Hide search icon
+        // Label is static.
         
-        searchContainerEl.classList.remove('hidden-animated'); // This will trigger transition to visible state defined in CSS
+        // Hide search bar if it's currently visible
+        if (!searchContainerEl.classList.contains('hidden-animated')) {
+            searchContainerEl.style.height = searchContainerEl.scrollHeight + 'px';
+            void searchContainerEl.offsetHeight; 
+            searchContainerEl.classList.add('hidden-animated');
+        }
+    }
+}
 
-        // Force a reflow before setting the target height for transition
-        void searchContainerEl.offsetHeight;
+/**
+ * Toggles the visibility of the search bar itself, used by search-icon-btn.
+ * This does not change the persistent "isSearchVisible" (feature enabled/disabled) setting.
+ */
+function toggleSearchBarVisibility() {
+    if (!searchContainerEl) return;
 
+    const isCurrentlyHidden = searchContainerEl.classList.contains('hidden-animated') || getComputedStyle(searchContainerEl).opacity === '0';
+
+    if (isCurrentlyHidden) { // Show it
+        searchContainerEl.classList.remove('hidden'); // Remove old direct hide class if used
+        searchContainerEl.style.display = 'block'; 
+
+        const scrollHeight = searchContainerEl.scrollHeight;
+        searchContainerEl.style.height = '0px'; // Start from 0 for animation
+        
+        searchContainerEl.classList.remove('hidden-animated'); 
+        void searchContainerEl.offsetHeight; // Reflow
         searchContainerEl.style.height = scrollHeight + 'px';
-        // Opacity is handled by the .hidden-animated class removal if opacity is part of its definition.
-        // If not, ensure opacity: 1 is set here or in the base #search-container style.
-        // searchContainerEl.style.opacity = '1'; // Already default for #search-container
-
-        menuSearchToggleBtnEl.textContent = "Disable Search Bar";
+        
         if (searchBarEl) searchBarEl.focus();
 
-        // Set height to 'auto' after transition for dynamic content
         const onTransitionEnd = (event) => {
-            // Ensure the transition is for the height property
             if (event.propertyName === 'height' && !searchContainerEl.classList.contains('hidden-animated')) {
                  searchContainerEl.style.height = 'auto';
             }
         };
         searchContainerEl.addEventListener('transitionend', onTransitionEnd, { once: true });
 
-    } else { // Hiding
-        // Set current height explicitly to transition from it
+    } else { // Hide it
         searchContainerEl.style.height = searchContainerEl.scrollHeight + 'px';
-
-        // Force reflow before adding class
         void searchContainerEl.offsetHeight; 
-
         searchContainerEl.classList.add('hidden-animated');
-        menuSearchToggleBtnEl.textContent = "Enable Search Bar";
-        
-        // After transition, you could add searchContainerEl.style.display = 'none';
-        // but .hidden-animated already sets height to 0 and opacity to 0, which is usually sufficient.
     }
 }
 
-
-// Search Bar Toggle Function (Handler for menu button)
-async function handleToggleSearchBar() {
-    const result = await chrome.storage.local.get(["isSearchVisible"]);
-    let currentVisibility = result.isSearchVisible !== undefined ? result.isSearchVisible : true; // Default to true if not set
-    const newVisibility = !currentVisibility;
-    await chrome.storage.local.set({ isSearchVisible: newVisibility });
-    applySearchVisibility(newVisibility);
-}
-
-// Theme Toggle Function (to be called by menu button)
-async function handleThemeToggle() {
-    document.body.classList.toggle('dark-mode');
-    const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-    await chrome.storage.local.set({ theme: currentTheme });
-    console.log('Theme saved to storage:', currentTheme);
-}
 
 // Settings Function (to be called by menu button)
 function handleOpenSettings() {
@@ -561,34 +608,61 @@ function attachEventListeners() {
             handleSaveNote();
         });
     }
-    if (createFolderBtnEl) {
-        createFolderBtnEl.addEventListener("click", (event) => {
-            animateButtonPress(event.currentTarget);
-            handleCreateFolder();
-        });
-    }
     if (saveTabBtnEl) {
         saveTabBtnEl.addEventListener("click", (event) => {
             animateButtonPress(event.currentTarget);
             handleSaveTab();
         });
     }
-    // Removed old direct button listeners for delete actions, settings, theme
 
-    if (storeEl) storeEl.addEventListener("click", handleStoreElClick); // Delegated for delete and expand buttons
+    if (storeEl) storeEl.addEventListener("click", handleStoreElClick); 
     
-    if (folderSelectEl) {
-        folderSelectEl.addEventListener("change", () => {
-            if (searchBarEl) { 
-                searchBarEl.value = ""; 
-            }
-            renderNotes(); 
-        });
-    }
-
     if (searchBarEl) {
         searchBarEl.addEventListener("input", () => {
             renderNotes(searchBarEl.value);
+        });
+    }
+    
+    // Search Icon Button Listener
+    if (searchIconBtnEl) {
+        searchIconBtnEl.addEventListener("click", (event) => {
+            animateButtonPress(event.currentTarget);
+            toggleSearchBarVisibility();
+        });
+    }
+
+    // New Folder Button Listener
+    if (currentFolderBtnEl) {
+        currentFolderBtnEl.addEventListener("click", (event) => {
+            animateButtonPress(event.currentTarget);
+            openFolderModal();
+        });
+    }
+
+    // Folder Modal List Item Click (Event Delegation)
+    if (folderModalListEl) {
+        folderModalListEl.addEventListener("click", (event) => {
+            if (event.target.tagName === "LI") {
+                const selectedValue = event.target.dataset.folderValue;
+                if (selectedValue) {
+                    currentSelectedFolder = selectedValue;
+                    updateCurrentFolderButtonText();
+                    closeFolderModal();
+                    if (searchBarEl) searchBarEl.value = ""; // Clear search on folder change
+                    renderNotes();
+
+                    // Optionally, re-highlight selected in modal if it were to stay open
+                    // populateFolderModalList(); // Re-adds .selected-folder class correctly
+                }
+            }
+        });
+    }
+
+    // Create Folder Button in Modal Listener
+    if (createFolderModalBtnEl) {
+        createFolderModalBtnEl.addEventListener("click", (event) => {
+            animateButtonPress(event.currentTarget);
+            handleCreateNewFolderInModal();
         });
     }
 
@@ -614,21 +688,33 @@ function attachEventListeners() {
 
     // New Menu Item Listeners
     if (menuSettingsBtnEl) menuSettingsBtnEl.addEventListener("click", (event) => {
-        animateButtonPress(event.currentTarget);
+        animateButtonPress(event.currentTarget); // Keep animation for standard buttons
         handleOpenSettings();
         toggleHamburgerMenu(); // Close menu after action
     });
-    if (menuThemeToggleBtnEl) menuThemeToggleBtnEl.addEventListener("click", (event) => {
-        animateButtonPress(event.currentTarget);
-        handleThemeToggle();
-        // Theme toggle is visual, so menu can stay open or be closed. Let's close it for consistency.
-        toggleHamburgerMenu();
-    });
-    if (menuSearchToggleBtnEl) menuSearchToggleBtnEl.addEventListener("click", (event) => {
-        animateButtonPress(event.currentTarget);
-        handleToggleSearchBar(); // Use the new handler
-        toggleHamburgerMenu(); // Close menu after action
-    });
+
+    // New Toggle Switch Listeners
+    if (themeToggleSwitchEl) {
+        themeToggleSwitchEl.addEventListener('change', async () => {
+            const isDarkMode = themeToggleSwitchEl.checked;
+            applyTheme(isDarkMode ? 'dark' : 'light'); // Apply theme immediately
+            await chrome.storage.local.set({ theme: isDarkMode ? 'dark' : 'light' });
+            console.log('Theme saved to storage via switch:', isDarkMode ? 'dark' : 'light');
+            // No need to animateButtonPress for switches
+            // Optionally close menu, or keep open: toggleHamburgerMenu(); 
+        });
+    }
+
+    if (searchToggleSwitchEl) {
+        searchToggleSwitchEl.addEventListener('change', async () => {
+            const isSearchEnabled = searchToggleSwitchEl.checked;
+            await chrome.storage.local.set({ isSearchVisible: isSearchEnabled });
+            applySearchVisibility(isSearchEnabled);
+            // No need to animateButtonPress for switches
+            // Optionally close menu: toggleHamburgerMenu();
+        });
+    }
+
     if (menuDeleteSelectedBtnEl) menuDeleteSelectedBtnEl.addEventListener("click", (event) => {
         animateButtonPress(event.currentTarget);
         handleDeleteSelectedNotes();
@@ -647,18 +733,30 @@ function attachEventListeners() {
 
 
     // Modal listeners
+    // Note Modal
     if (modalCloseBtnEl) { 
         modalCloseBtnEl.addEventListener("click", (event) => {
-            animateButtonPress(event.currentTarget);
+            animateButtonPress(event.currentTarget); // Assuming modalCloseBtnEl is for the note modal
             closeNoteModal();
         });
-        window.addEventListener("click", (event) => {
-            if (event.target === noteModalEl) { 
-                // Not animating the backdrop click for closing modal, as it's not a button.
-                closeNoteModal();
-            }
+    }
+    // Folder Modal
+    if (folderModalCloseBtnEl) {
+        folderModalCloseBtnEl.addEventListener("click", (event) => {
+            animateButtonPress(event.currentTarget);
+            closeFolderModal();
         });
     }
+
+    // Window click to close modals
+    window.addEventListener("click", (event) => {
+        if (event.target === noteModalEl) { 
+            closeNoteModal();
+        }
+        if (event.target === folderModalEl) {
+            closeFolderModal();
+        }
+    });
     // Removed old direct button listeners for settings & theme, now handled by menu items.
 }
 
@@ -678,21 +776,29 @@ function attachEventListeners() {
  */
 async function init() {
     await loadAndApplyTheme(); // Load theme first
+    if (themeToggleSwitchEl) {
+        themeToggleSwitchEl.checked = document.body.classList.contains('dark-mode');
+    }
 
     // Load search visibility preference
     const searchPrefResult = await chrome.storage.local.get(["isSearchVisible"]);
     let isSearchVisible = searchPrefResult.isSearchVisible !== undefined ? searchPrefResult.isSearchVisible : true; // Default true
+    if (searchToggleSwitchEl) {
+        searchToggleSwitchEl.checked = isSearchVisible;
+    }
     applySearchVisibility(isSearchVisible); // Apply visibility on init
+
 
     const result = await chrome.storage.local.get(["data", "folders"]);
     myData = result.data || [];
     myFolders = result.folders || [];
     
-    if (folderSelectEl) { 
-        populateFolderSelect();
-    }
+    // if (folderSelectEl) {  // Old way
+    //     populateFolderSelect();
+    // }
+    updateCurrentFolderButtonText(); // New: Initialize button text
     renderNotes(); 
-    attachEventListeners();
+    attachEventListeners(); // Ensure new listeners for folder modal are added here
 }
 
 // Start the application
@@ -701,4 +807,27 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init().catch(error => console.error("Initialization failed:", error));
+}
+
+// Listener for messages from other parts of the extension (e.g., settings page)
+if (chrome.runtime && chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.type === 'settingChanged') {
+            console.log('Setting changed message received:', message);
+            if (message.setting === 'theme') {
+                applyTheme(message.newValue); // Ensure applyTheme is defined and works
+                if (typeof themeToggleSwitchEl !== 'undefined' && themeToggleSwitchEl) {
+                    themeToggleSwitchEl.checked = message.newValue === 'dark';
+                }
+            } else if (message.setting === 'searchVisibility') {
+                applySearchVisibility(message.newValue); // Ensure applySearchVisibility is defined
+                if (typeof searchToggleSwitchEl !== 'undefined' && searchToggleSwitchEl) {
+                    searchToggleSwitchEl.checked = message.newValue;
+                }
+            }
+            // It's good practice to send a response, especially if the sender expects one.
+            sendResponse({ status: "success", message: "Setting updated in popup." });
+        }
+        return true; // Required for asynchronous sendResponse.
+    });
 }

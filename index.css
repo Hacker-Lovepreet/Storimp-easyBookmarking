@@ -1,69 +1,73 @@
 :root {
-  --bg-color: #f8f8fa; /* Apple-like light gray */
-  --text-color: #1d1d1f; /* Apple's typical dark text color */
-  --primary-accent-color: #007aff; /* Apple's standard blue */
-  --primary-accent-hover-color: #005ecb; /* Darker blue for hover */
-  --secondary-accent-color: #efefef; /* Light gray for menu/toolbars */
-  --secondary-accent-hover-color: #e5e5e5; /* Border for menu/toolbars */
-  --border-color: #dcdcdc; /* Subtle border color */
-  --input-bg-color: #ffffff;
-  --input-border-color: #d0d0d0; /* Slightly softer border for inputs */
-  --button-text-color: white;
-  --note-item-border-color: #e5e5e5; /* Lighter border for list items */
-  --note-list-text-color: #333333; /* Adjusted for better contrast on new bg */
-  --note-folder-tag-bg-color: #e7e7e7;
-  --note-folder-tag-text-color: #555555;
-  --delete-btn-bg-color: #ff3b30; /* Apple's destructive action red */
-  --delete-btn-hover-bg-color: #d92c23;
-  --delete-selected-btn-bg-color: #ff9500; /* Apple's orange */
-  --delete-selected-btn-hover-bg-color: #db7f00;
-  --create-folder-btn-bg-color: #34c759; /* Apple's green */
-  --create-folder-btn-hover-bg-color: #2ca34a;
-  --expand-note-btn-bg-color: #8e8e93; /* Neutral gray for less prominent actions */
-  --expand-note-btn-hover-bg-color: #75757a;
-  --modal-bg-color: #fefefe;
-  --modal-text-color: #1d1d1f;
-  --modal-border-color: #dcdcdc; /* Consistent with other borders */
-  --modal-close-btn-color: #8e8e93;
-  --modal-close-btn-hover-color: #333333;
-  --hr-color: #e5e5e5; /* Very light gray for hr */
-  --scrollbar-thumb-color: #c1c1c1;
-  --scrollbar-track-color: var(--bg-color); /* Match background */
-  --scrollbar-thumb-hover-color: #a0a0a0;
+  --primary-accent-color: #007BFF;
+  --primary-accent-hover-color: #0056b3;
+  --secondary-accent-color: #e9ecef; /* for light mode backgrounds like top bar */
+  --secondary-accent-hover-color: #dee2e6; /* for light mode borders/hover on secondary elements */
+  --border-color: #ced4da; /* for general borders in light mode */
+  --input-bg-color: #ffffff; /* light mode */
+  --input-border-color: #ced4da; /* light mode */
+  --text-color: #212529; /* light mode main text */
+  --button-text-color: #ffffff; /* for primary buttons */
+  --delete-btn-bg-color: #DC3545;
+  --delete-btn-hover-bg-color: #c82333;
+  --create-folder-btn-bg-color: #28a745; /* keeping a green for create, can revise if needed */
+  --create-folder-btn-hover-bg-color: #218838;
+
+  /* Variables to review and adjust */
+  --bg-color: #f8f9fa; /* Adjusted to align with new palette (light gray) */
+  --note-item-border-color: var(--border-color); /* Align with general border color */
+  --note-list-text-color: var(--text-color); /* Align with main text color */
+  --note-folder-tag-bg-color: #e9ecef; /* Align with secondary accent */
+  --note-folder-tag-text-color: #495057; /* Darker gray for readability */
+  --delete-selected-btn-bg-color: #fd7e14; /* A distinct orange */
+  --delete-selected-btn-hover-bg-color: #e86a00;
+  --expand-note-btn-bg-color: #6c757d; /* A neutral gray */
+  --expand-note-btn-hover-bg-color: #5a6268;
+  --modal-bg-color: #ffffff; /* Modal background */
+  --modal-text-color: var(--text-color); /* Modal text */
+  --modal-border-color: var(--border-color); /* Modal border */
+  --modal-close-btn-color: #6c757d;
+  --modal-close-btn-hover-color: #495057;
+  --hr-color: var(--border-color); /* HR lines to use border color */
+  --scrollbar-thumb-color: #adb5bd;
+  --scrollbar-track-color: var(--bg-color);
+  --scrollbar-thumb-hover-color: #9098a0;
 }
 
 body.dark-mode {
-  --bg-color: #1c1c1e; /* Apple's dark mode background */
-  --text-color: #f5f5f7; /* Apple's light text on dark bg */
-  --primary-accent-color: #0a84ff; /* Brighter blue for dark mode */
-  --primary-accent-hover-color: #0060df;
-  --secondary-accent-color: #2c2c2e; /* Darker gray for menu/toolbars */
-  --secondary-accent-hover-color: #3a3a3c; /* Border for dark menu */
-  --border-color: #424245; /* Subtle border in dark mode */
-  --input-bg-color: #2c2c2e; /* Dark input background */
-  --input-border-color: #545458; /* Softer border for dark inputs */
-  --button-text-color: white;
-  --note-item-border-color: #3a3a3c; /* Lighter border for list items in dark */
-  --note-list-text-color: #e0e0e0;
-  --note-folder-tag-bg-color: #3a3a3c;
-  --note-folder-tag-text-color: #cccccc;
-  --delete-btn-bg-color: #ff453a; /* Brighter red for dark mode */
-  --delete-btn-hover-bg-color: #d9332a;
-  --delete-selected-btn-bg-color: #ff9f0a; /* Brighter orange for dark mode */
-  --delete-selected-btn-hover-bg-color: #db8900;
-  --create-folder-btn-bg-color: #30d158; /* Brighter green for dark mode */
-  --create-folder-btn-hover-bg-color: #29b44c;
-  --expand-note-btn-bg-color: #98989d; /* Lighter gray for dark mode */
-  --expand-note-btn-hover-bg-color: #7c7c80;
-  --modal-bg-color: #2c2c2e; /* Dark modal background */
-  --modal-text-color: #f5f5f7;
-  --modal-border-color: #424245;
-  --modal-close-btn-color: #b0b0b0;
-  --modal-close-btn-hover-color: #f5f5f7;
-  --hr-color: #424245; /* Dark hr */
-  --scrollbar-thumb-color: #555;
-  --scrollbar-track-color: var(--bg-color); /* Match background */
-  --scrollbar-thumb-hover-color: #6a6a6a;
+  --bg-color: #121212; /* a common very dark background */
+  --text-color: #f8f9fa; /* dark mode main text */
+  --primary-accent-color: #007BFF; /* can keep it the same, or make it slightly lighter if needed, e.g., #3395ff */
+  --primary-accent-hover-color: #0056b3;
+  --secondary-accent-color: #1e1e1e; /* for dark mode backgrounds like top bar */
+  --secondary-accent-hover-color: #2c2c2e; /* for dark mode borders/hover on secondary elements */
+  --border-color: #424245; /* dark mode general borders */
+  --input-bg-color: #2c2c2e; /* dark mode input background */
+  --input-border-color: #545458; /* dark mode input border */
+  --note-list-text-color: #e0e0e0; /* dark mode */
+  --modal-bg-color: #1e1e1e; /* dark mode */
+  --modal-text-color: #f8f9fa; /* dark mode */
+
+  /* Variables to review and adjust (using new dark mode values) */
+  --button-text-color: #ffffff; /* Ensure primary button text is white */
+  --note-item-border-color: var(--border-color); /* Align with general border color */
+  --note-folder-tag-bg-color: #2c2c2e; /* Align with dark input background */
+  --note-folder-tag-text-color: #adb5bd; /* Lighter gray for readability */
+  --delete-btn-bg-color: #DC3545; /* Consistent with light mode red */
+  --delete-btn-hover-bg-color: #c82333;
+  --delete-selected-btn-bg-color: #fd7e14; /* Consistent with light mode orange */
+  --delete-selected-btn-hover-bg-color: #e86a00;
+  --create-folder-btn-bg-color: #28a745; /* Consistent with light mode green */
+  --create-folder-btn-hover-bg-color: #218838;
+  --expand-note-btn-bg-color: #495057; /* A darker, neutral gray */
+  --expand-note-btn-hover-bg-color: #343a40;
+  --modal-border-color: var(--border-color); /* Modal border */
+  --modal-close-btn-color: #adb5bd;
+  --modal-close-btn-hover-color: #f8f9fa;
+  --hr-color: var(--border-color); /* HR lines to use border color */
+  --scrollbar-thumb-color: #545458;
+  --scrollbar-track-color: var(--bg-color);
+  --scrollbar-thumb-hover-color: #6a6a6e;
 }
 
 /* =================================================================================
@@ -88,6 +92,32 @@ body.dark-mode {
 
 .button-pressed {
     animation: buttonPress 0.2s ease-out;
+}
+
+/* Specific button styling for primary/secondary actions */
+#save-note-btn {
+    /* Inherits general button style, which is primary */
+}
+
+#save-tab {
+    background-color: transparent;
+    color: var(--primary-accent-color);
+    border: 1px solid var(--primary-accent-color);
+}
+#save-tab:hover {
+    background-color: var(--primary-accent-color);
+    color: var(--button-text-color); /* White text on hover */
+    border-color: var(--primary-accent-color);
+}
+
+body.dark-mode #save-tab {
+    color: var(--primary-accent-color); /* Ensure this has good contrast on dark bg */
+    border: 1px solid var(--primary-accent-color);
+}
+body.dark-mode #save-tab:hover {
+    background-color: var(--primary-accent-hover-color); /* Use hover color from variables */
+    color: var(--button-text-color);
+    border-color: var(--primary-accent-hover-color);
 }
 
 
@@ -159,7 +189,7 @@ body.dark-mode #hamburger-btn:hover {
     padding: 12px 20px; /* Generous padding for touch */
     width: 100%;
     text-align: left;
-    font-size: 15px; /* Consistent font size */
+    font-size: 1em; /* Use base font size */
     font-family: inherit;
     cursor: pointer;
     display: block; /* Ensure it takes full width for click */
@@ -182,6 +212,99 @@ body.dark-mode #hamburger-menu li button:hover {
     /* color transition from base #hamburger-menu li button will apply */
 }
 
+/* Destructive action menu items */
+#hamburger-menu li button#menu-delete-selected-btn,
+#hamburger-menu li button#menu-delete-all-btn,
+#hamburger-menu li button#menu-clear-data-btn {
+    color: var(--delete-btn-bg-color); /* Use a red variable */
+}
+
+#hamburger-menu li button#menu-delete-selected-btn:hover,
+#hamburger-menu li button#menu-delete-all-btn:hover,
+#hamburger-menu li button#menu-clear-data-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1); /* Light red background on hover */
+    color: var(--delete-btn-hover-bg-color); /* Darker red text on hover */
+}
+
+
+/* Styles for interactive menu items (toggles) */
+#hamburger-menu li.interactive-menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px; /* Consistent padding, adjust if needed */
+    /* cursor: default; Do not make the whole li clickable if only switch is interactive */
+}
+
+#hamburger-menu .menu-item-label {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+    font-size: 1em; /* Match button text size */
+    font-weight: 500; /* Match button font weight */
+    color: var(--text-color);
+}
+#hamburger-menu .menu-item-label .icon {
+    /* Icons are already in spans, can add specific styling if needed */
+    /* e.g., font-size: 1.1em; */
+}
+
+
+/* Toggle Switch Styles */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px; /* Width of the toggle */
+    height: 24px; /* Height of the toggle */
+    flex-shrink: 0; /* Prevent shrinking if label text is long */
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc; /* Default off color */
+    transition: .4s;
+}
+
+.slider.round {
+    border-radius: 24px; /* Make it round */
+}
+
+.slider.round:before {
+    position: absolute;
+    content: "";
+    height: 18px; /* Size of the knob */
+    width: 18px;  /* Size of the knob */
+    left: 3px;   /* Position of the knob when off */
+    bottom: 3px; /* Position of the knob when off */
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-accent-color); /* On color */
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary-accent-color); /* Optional focus style */
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px); /* How far the knob moves */
+}
+
+
 .menu-divider {
     height: 1px;
     background-color: var(--border-color); /* Use border color for divider */
@@ -192,12 +315,12 @@ body.dark-mode #hamburger-menu li button:hover {
 
 body{
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     min-width: 380px; /* Slightly reduced min-width for flexibility */
     background: var(--bg-color);
     color: var(--text-color);
-    font-size: 15px; /* Base font size */
-    line-height: 1.4; /* Improved line height */
+    font-size: 16px; /* Base font size */
+    line-height: 1.5; /* Improved line height */
     transition: background-color 0.3s, color 0.3s;
 }
 
@@ -243,7 +366,7 @@ body{
     color: var(--text-color);
     border-radius: 6px; /* Slightly more rounded */
     box-sizing: border-box; 
-    font-size: 15px;
+    font-size: 1em; /* Use base font size */
     font-family: inherit; /* Inherit from body */
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease; /* Added for theme changes */
 }
@@ -277,7 +400,7 @@ hr {
     color: var(--text-color);
     border-radius: 6px; /* Slightly more rounded */
     font-family: inherit; 
-    font-size: 15px; 
+    font-size: 1em; /* Use base font size */
     margin-bottom: 20px; 
     resize: vertical; 
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease; /* Added for theme changes */
@@ -294,7 +417,8 @@ button{
     background-color: var(--primary-accent-color);
     border-radius: 6px; /* Slightly more rounded */
     border: none; 
-    font-size: 15px; /* Standardized button font size */
+    font-size: 1em; /* Use base font size */
+    font-family: inherit; /* Inherit from body */
     font-weight: 500; /* Medium weight */
     color: var(--button-text-color);
     padding: 10px 18px; /* Generous padding */
@@ -304,6 +428,11 @@ button{
 
 button:hover {
     background-color: var(--primary-accent-hover-color);
+}
+button:focus-visible { /* Using focus-visible for better accessibility */
+    outline: none;
+    border-color: var(--primary-accent-color); /* Assuming buttons might not have a border by default */
+    box-shadow: 0 0 0 2px var(--bg-color), 0 0 0 4px var(--primary-accent-color); /* Halo effect */
 }
 
 input[type="text"] { 
@@ -316,7 +445,7 @@ input[type="text"] {
     border-radius: 6px; /* Slightly more rounded */
     margin-bottom: 15px; /* Adjusted margin */
     font-family: inherit;
-    font-size: 15px; /* Consistent with textarea */
+    font-size: 1em; /* Use base font size */
     /* This rule applies to #search-bar and #new-folder-name as they are input[type="text"] */
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease; /* Added for theme changes */
 }
@@ -347,11 +476,13 @@ li{
     align-items: center;
     word-wrap: break-word; 
     overflow-wrap: break-word; 
+    border-radius: 6px; /* Add border-radius to list items */
+    margin-bottom: 8px; /* Add some space between items */
     /* opacity: 0; REMOVED - As per instruction, only items with .note-item-fade-in will initially be transparent */
     transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
 }
 li:hover {
-    background-color: rgba(0,0,0,0.03); /* Subtle hover for light theme */
+    background-color: var(--secondary-accent-hover-color); /* Use variable for hover */
     transform: translateY(-2px) scale(1.01); /* Slight lift and subtle scale */
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
@@ -363,7 +494,7 @@ body.dark-mode li:hover {
 
 
 li:last-child {
-    border-bottom: none; 
+    /* border-bottom: none; /* May not be needed if items have margin and own background/border */
 }
 
 .note-checkbox {
@@ -382,11 +513,12 @@ body.dark-mode .note-checkbox {
     white-space: pre-wrap; 
     word-break: break-word;
     color: var(--text-color); 
-    font-size: 14px; /* Slightly smaller for note content preview */
-    line-height: 1.5;
+    font-size: 0.9em; /* previews */
+    line-height: 1.5; /* Inherit or adjust as needed */
 }
-.note-text-content strong { /* Ensure title part is bolder */
+.note-text-content strong { /* Note titles */
     font-weight: 600; /* Semibold */
+    font-size: 1em; /* Base size for titles */
     color: var(--text-color); /* Ensure title color matches main text */
     display: block; /* Make title take its own line */
     margin-bottom: 4px; /* Space between title and content preview */
@@ -455,7 +587,7 @@ body.dark-mode .note-text-content a {
     color: var(--text-color);
     border-radius: 6px; /* Slightly more rounded */
     font-family: inherit;
-    font-size: 14px; /* Consistent input font size */
+    font-size: 1em; /* Use base font size */
     /* #new-folder-name is input[type="text"], already covered. #folder-select is a select. */
     /* Add transition for select here or rely on a generic select rule */
 }
@@ -478,7 +610,8 @@ body.dark-mode .note-text-content a {
 
 #create-folder-btn {
     padding: 10px 15px; /* Matched other main buttons */
-    font-size: 14px; 
+    font-size: 1em; /* Use base font size */
+    font-family: inherit; /* Inherit from body */
     font-weight: 500; /* Medium */
     margin: 0; 
     background-color: var(--create-folder-btn-bg-color);
@@ -639,7 +772,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 
 #top-bar-container {
     display: flex;
-    justify-content: flex-start; /* Align hamburger to the left */
+    align-items: center; /* Vertically align items */
     padding: 8px 15px; 
     background-color: var(--secondary-accent-color); 
     border-bottom: 1px solid var(--secondary-accent-hover-color);
@@ -700,14 +833,17 @@ body.dark-mode #hamburger-menu {
 
 #hamburger-menu li button { /* Targets buttons directly within li */
     display: block;
+    display: flex; /* For icon alignment */
+    align-items: center; /* For icon alignment */
+    gap: 10px; /* Space between icon and text */
     width: 100%;
     background: none;
     border: none;
     color: var(--text-color);
-    padding: 12px 20px; /* Consistent padding for menu items */
+    padding: 12px 15px; /* Adjusted padding slightly for icons */
     text-align: left;
     cursor: pointer;
-    font-size: 15px; 
+    font-size: 1em; /* Use base font size */
     font-weight: 500; /* Medium weight, consistent with other buttons */
     font-family: inherit; /* Ensure it uses the body font */
     box-sizing: border-box;
@@ -716,6 +852,10 @@ body.dark-mode #hamburger-menu {
 }
 #hamburger-menu li button:hover {
     background-color: var(--secondary-accent-hover-color); /* Use a subtle hover, like menu bar items */
+}
+#hamburger-menu li button:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--primary-accent-color); /* Inset shadow for menu items */
 }
 body.dark-mode #hamburger-menu li button {
     color: var(--text-color); /* Ensure correct text color in dark mode */
@@ -751,13 +891,28 @@ body.dark-mode #hamburger-menu li button:hover {
     100% { background-color: transparent; color: var(--text-color); } /* Revert to normal option style */
 }
 
-.newly-added-folder {
+.newly-added-folder { /* This was for the old select dropdown */
     animation: highlightTemporary 1.5s ease-out;
 }
 /* Ensure this overrides default option background/color during animation */
 .newly-added-folder:focus, .newly-added-folder:active { /* If it can be focused */
     background-color: var(--primary-accent-color) !important; /* Maintain during animation */
     color: white !important;
+}
+
+/* Highlight for newly added folder in the modal list */
+@keyframes newFolderModalItemHighlight {
+    0% { background-color: var(--primary-accent-color); color: var(--button-text-color); }
+    50% { background-color: var(--primary-accent-color); color: var(--button-text-color); }
+    100% { background-color: transparent; color: var(--text-color); } /* Or original item background/text color */
+}
+
+#folder-modal-list li.newly-added-folder-modal-item {
+    animation: newFolderModalItemHighlight 1.5s ease-out;
+}
+/* Ensure correct text color in dark mode during animation if needed */
+body.dark-mode #folder-modal-list li.newly-added-folder-modal-item {
+    animation: newFolderModalItemHighlight 1.5s ease-out; /* Re-declare to ensure it overrides if needed, or adjust keyframes for dark mode */
 }
 
 /* Add a generic transition for select elements if not already covered by input[type="text"] like styles */
@@ -860,3 +1015,150 @@ body.dark-mode #hamburger-menu li button:hover {
     display: none !important;
 }
 */
+
+/* =================================================================================
+   Top Bar Folder Button
+   ================================================================================= */
+#current-folder-btn {
+    background-color: var(--secondary-accent-color); /* Or transparent/very light bg */
+    color: var(--text-color);
+    border: 1px solid var(--border-color); /* Subtle border */
+    padding: 6px 12px;
+    margin-left: 10px; /* Space from hamburger */
+    border-radius: 6px;
+    font-size: 0.9em; /* Slightly smaller than base */
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#current-folder-btn:hover {
+    background-color: var(--secondary-accent-hover-color);
+    border-color: var(--primary-accent-color);
+}
+
+body.dark-mode #current-folder-btn {
+    background-color: var(--secondary-accent-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+body.dark-mode #current-folder-btn:hover {
+    background-color: var(--secondary-accent-hover-color);
+    border-color: var(--primary-accent-color);
+}
+
+#search-icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 5px; /* Adjust as needed */
+    margin-left: auto; /* Pushes it to the right, or use flexbox on parent */
+    font-size: 18px; /* Adjust for icon size */
+    cursor: pointer;
+    line-height: 1; /* For better SVG alignment */
+}
+#search-icon-btn svg {
+    display: block; /* Helps with alignment and sizing */
+    width: 1em; /* Control size via font-size of button */
+    height: 1em;
+}
+#search-icon-btn:hover {
+    background-color: rgba(0,0,0,0.05); /* Subtle hover */
+    border-radius: 4px;
+}
+body.dark-mode #search-icon-btn {
+    color: var(--text-color);
+}
+body.dark-mode #search-icon-btn:hover {
+    background-color: rgba(255,255,255,0.1); /* Subtle hover for dark mode */
+}
+
+
+/* =================================================================================
+   Folder Modal Styles
+   ================================================================================= */
+/* #folder-modal will use .modal styles for basic layout, backdrop, and open/close transitions */
+/* Specific adjustments for folder modal content */
+#folder-modal .modal-content {
+    max-width: 450px; /* Slightly smaller for folder management */
+}
+
+#folder-modal h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.4em; /* Consistent with other modal titles */
+    color: var(--text-color);
+}
+
+#folder-modal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0; /* Space before create section */
+    max-height: 250px; /* Limit height and make scrollable if many folders */
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+#folder-modal-list li {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 1em;
+    color: var(--text-color);
+}
+
+#folder-modal-list li:last-child {
+    border-bottom: none;
+}
+
+#folder-modal-list li:hover {
+    background-color: var(--secondary-accent-hover-color);
+}
+
+#folder-modal-list li.selected-folder {
+    background-color: var(--primary-accent-color);
+    color: var(--button-text-color);
+    font-weight: 600;
+}
+body.dark-mode #folder-modal-list li.selected-folder {
+    /* Ensure contrast if primary-accent-color is same in dark mode */
+    color: var(--button-text-color); 
+}
+
+
+#create-folder-modal-section {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#new-folder-modal-input {
+    flex-grow: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--input-border-color);
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 1em;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease;
+}
+#new-folder-modal-input:focus {
+    outline: none;
+    border-color: var(--primary-accent-color);
+    box-shadow: 0 0 0 1px var(--primary-accent-color);
+}
+
+#create-folder-modal-btn {
+    /* General button styles will apply for font, basic color */
+    background-color: var(--create-folder-btn-bg-color);
+    padding: 10px 15px; /* Adjust if needed */
+    margin: 0; /* Reset margin if coming from general button */
+    font-size: 1em; /* Ensure consistency */
+}
+#create-folder-modal-btn:hover {
+    background-color: var(--create-folder-btn-hover-bg-color);
+}
