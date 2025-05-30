@@ -236,7 +236,17 @@ async function handleCreateFolder() {
     myFolders.push(newFolderName);
     await saveFoldersToStorage();
     populateFolderSelect();
-    folderSelectEl.value = newFolderName;
+    folderSelectEl.value = newFolderName; // The new folder is now selected
+
+    // Highlight the newly added folder option
+    const newOption = Array.from(folderSelectEl.options).find(opt => opt.value === newFolderName);
+    if (newOption) {
+        newOption.classList.add('newly-added-folder');
+        setTimeout(() => {
+            newOption.classList.remove('newly-added-folder');
+        }, 1500); // Duration of the animation (matches CSS)
+    }
+
     newFolderInputEl.value = "";
     renderNotes();
 }
@@ -446,19 +456,64 @@ function toggleHamburgerMenu() {
 
 // Function to apply search visibility and update button text
 function applySearchVisibility(isVisible) {
-    if (searchContainerEl && menuSearchToggleBtnEl) {
-        if (isVisible) {
-            searchContainerEl.classList.remove("hidden");
-            menuSearchToggleBtnEl.textContent = "Disable Search Bar";
-            if (searchBarEl) { // Focus only if becoming visible
-                searchBarEl.focus();
-            }
+    if (!searchContainerEl || !menuSearchToggleBtnEl) return;
+
+    if (isVisible) {
+        // Prepare to show:
+        searchContainerEl.classList.remove('hidden'); // Remove old direct hide class if used
+        searchContainerEl.style.display = 'block'; // Ensure it's not display:none for scrollHeight calculation
+
+        // Set height to auto temporarily to measure its natural height, then set to scrollHeight for animation
+        const currentDisplay = searchContainerEl.style.display; // Store current display
+        searchContainerEl.style.height = 'auto'; // Allow it to take full height for measurement
+        const scrollHeight = searchContainerEl.scrollHeight;
+        
+        // If it was previously hidden-animated, it might have height 0.
+        // We need to set it to 0 before removing hidden-animated to ensure transition starts correctly.
+        if (searchContainerEl.classList.contains('hidden-animated')) {
+            searchContainerEl.style.height = '0px';
         } else {
-            searchContainerEl.classList.add("hidden");
-            menuSearchToggleBtnEl.textContent = "Enable Search Bar";
+            // If it was visible and just toggling text, or initial load, set its current scrollHeight
+             searchContainerEl.style.height = scrollHeight + 'px';
         }
+        
+        searchContainerEl.classList.remove('hidden-animated'); // This will trigger transition to visible state defined in CSS
+
+        // Force a reflow before setting the target height for transition
+        void searchContainerEl.offsetHeight;
+
+        searchContainerEl.style.height = scrollHeight + 'px';
+        // Opacity is handled by the .hidden-animated class removal if opacity is part of its definition.
+        // If not, ensure opacity: 1 is set here or in the base #search-container style.
+        // searchContainerEl.style.opacity = '1'; // Already default for #search-container
+
+        menuSearchToggleBtnEl.textContent = "Disable Search Bar";
+        if (searchBarEl) searchBarEl.focus();
+
+        // Set height to 'auto' after transition for dynamic content
+        const onTransitionEnd = (event) => {
+            // Ensure the transition is for the height property
+            if (event.propertyName === 'height' && !searchContainerEl.classList.contains('hidden-animated')) {
+                 searchContainerEl.style.height = 'auto';
+            }
+        };
+        searchContainerEl.addEventListener('transitionend', onTransitionEnd, { once: true });
+
+    } else { // Hiding
+        // Set current height explicitly to transition from it
+        searchContainerEl.style.height = searchContainerEl.scrollHeight + 'px';
+
+        // Force reflow before adding class
+        void searchContainerEl.offsetHeight; 
+
+        searchContainerEl.classList.add('hidden-animated');
+        menuSearchToggleBtnEl.textContent = "Enable Search Bar";
+        
+        // After transition, you could add searchContainerEl.style.display = 'none';
+        // but .hidden-animated already sets height to 0 and opacity to 0, which is usually sufficient.
     }
 }
+
 
 // Search Bar Toggle Function (Handler for menu button)
 async function handleToggleSearchBar() {

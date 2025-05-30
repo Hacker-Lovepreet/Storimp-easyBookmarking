@@ -165,16 +165,21 @@ body.dark-mode #hamburger-btn:hover {
     display: block; /* Ensure it takes full width for click */
     margin: 0; /* Reset default button margin */
     border-radius: 0; /* No rounding for menu items */
+    transition: background-color 0.3s ease-out, color 0.3s ease-out, transform 0.2s ease-out, padding-left 0.2s ease-out; /* Added color, aligned duration */
 }
 
 #hamburger-menu li button:hover {
-    background-color: var(--secondary-accent-color); /* Use secondary for hover */
+    background-color: var(--secondary-accent-hover-color); /* Changed to hover variable */
+    transform: translateX(3px); /* Slight shift to the right */
+    padding-left: 23px; /* Increase padding to complement transform */
 }
 body.dark-mode #hamburger-menu li button {
     color: var(--text-color); /* Ensure dark mode text color */
 }
 body.dark-mode #hamburger-menu li button:hover {
-    background-color: var(--secondary-accent-color); /* Ensure dark mode hover */
+    background-color: var(--secondary-accent-hover-color); /* Changed to hover variable */
+    /* transform and padding-left from base hover will apply */
+    /* color transition from base #hamburger-menu li button will apply */
 }
 
 .menu-divider {
@@ -211,10 +216,23 @@ body{
 /* Search Bar Styling */
 #search-container {
     margin-bottom: 20px;
-    display: block; /* Initially visible, JS will toggle */
+    display: block; /* Initially visible, JS will toggle if not using hidden-animated */
+    overflow: hidden;
+    transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out, margin-bottom 0.3s ease-in-out;
+    height: auto; /* Default height when visible */
+    opacity: 1;
 }
-#search-container.hidden { /* Class to hide search bar */
-    display: none;
+#search-container.hidden { /* Existing class to hide search bar - for non-animated hiding if needed */
+    display: none !important; /* Retain !important if JS logic might compete */
+}
+
+#search-container.hidden-animated { /* New class for animated hiding */
+    height: 0 !important; /* Force height to 0 for transition */
+    opacity: 0;
+    margin-bottom: 0 !important; /* Remove margin when hidden */
+    padding-top: 0; /* Remove padding during animated hide */
+    padding-bottom: 0; /* Remove padding during animated hide */
+    border-width: 0; /* Remove border during animated hide */
 }
 
 #search-bar {
@@ -227,6 +245,7 @@ body{
     box-sizing: border-box; 
     font-size: 15px;
     font-family: inherit; /* Inherit from body */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease; /* Added for theme changes */
 }
 #search-bar:focus {
     outline: none;
@@ -261,6 +280,7 @@ hr {
     font-size: 15px; 
     margin-bottom: 20px; 
     resize: vertical; 
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease; /* Added for theme changes */
 }
 #note-content:focus {
     outline: none;
@@ -279,7 +299,7 @@ button{
     color: var(--button-text-color);
     padding: 10px 18px; /* Generous padding */
     cursor: pointer; 
-    transition: background-color 0.2s ease; 
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease, transform 0.2s ease-out; 
 }
 
 button:hover {
@@ -297,6 +317,8 @@ input[type="text"] {
     margin-bottom: 15px; /* Adjusted margin */
     font-family: inherit;
     font-size: 15px; /* Consistent with textarea */
+    /* This rule applies to #search-bar and #new-folder-name as they are input[type="text"] */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease; /* Added for theme changes */
 }
 input[type="text"]:focus {
     outline: none;
@@ -326,12 +348,17 @@ li{
     word-wrap: break-word; 
     overflow-wrap: break-word; 
     /* opacity: 0; REMOVED - As per instruction, only items with .note-item-fade-in will initially be transparent */
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
 }
 li:hover {
     background-color: rgba(0,0,0,0.03); /* Subtle hover for light theme */
+    transform: translateY(-2px) scale(1.01); /* Slight lift and subtle scale */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 body.dark-mode li:hover {
     background-color: rgba(255,255,255,0.05); /* Subtle hover for dark theme */
+    /* transform will be inherited from li:hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Adjusted shadow for dark mode */
 }
 
 
@@ -407,7 +434,7 @@ body.dark-mode .note-text-content a {
     cursor: pointer;
     margin-left: auto; 
     flex-shrink: 0; 
-    transition: background-color 0.2s ease;
+    transition: background-color 0.3s ease; /* Updated to 0.3s */
 }
 
 .delete-btn:hover {
@@ -429,6 +456,11 @@ body.dark-mode .note-text-content a {
     border-radius: 6px; /* Slightly more rounded */
     font-family: inherit;
     font-size: 14px; /* Consistent input font size */
+    /* #new-folder-name is input[type="text"], already covered. #folder-select is a select. */
+    /* Add transition for select here or rely on a generic select rule */
+}
+#folder-select { /* Specific transition for select, if not covered by a generic 'select' rule */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease;
 }
 #folder-select:focus, #new-folder-name:focus {
     outline: none;
@@ -572,7 +604,7 @@ body.dark-mode .modal-close-btn:focus {
     margin-left: 8px; /* More space */
     margin-top: 0; 
     margin-bottom: 0;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.3s ease; /* Updated to 0.3s */
 }
 
 .expand-note-btn:hover {
@@ -707,9 +739,33 @@ body.dark-mode #hamburger-menu li button:hover {
 
 
 /* Utility class for hiding elements like the search bar */
-.hidden {
-    display: none !important;
+/* .hidden is already defined above for #search-container.hidden */
+/* .hidden-animated is defined above for #search-container.hidden-animated */
+
+/* =================================================================================
+   Folder Creation Animation
+   ================================================================================= */
+@keyframes highlightTemporary {
+    0% { background-color: var(--primary-accent-color); color: white; }
+    70% { background-color: var(--primary-accent-color); color: white; }
+    100% { background-color: transparent; color: var(--text-color); } /* Revert to normal option style */
 }
+
+.newly-added-folder {
+    animation: highlightTemporary 1.5s ease-out;
+}
+/* Ensure this overrides default option background/color during animation */
+.newly-added-folder:focus, .newly-added-folder:active { /* If it can be focused */
+    background-color: var(--primary-accent-color) !important; /* Maintain during animation */
+    color: white !important;
+}
+
+/* Add a generic transition for select elements if not already covered by input[type="text"] like styles */
+/* This was added in previous attempt, ensure #folder-select has its transition */
+/* select {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease;
+} */
+
 
 /* Hamburger Menu Styles */
 
